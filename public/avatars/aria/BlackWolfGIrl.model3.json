@@ -1,0 +1,19 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "BlackWolfGIrl.moc3",
+		"Textures": [
+			"BlackWolfGIrl.4096/texture_00.png",
+			"BlackWolfGIrl.4096/texture_01.png"
+		],
+		"Physics": "BlackWolfGIrl.physics3.json",
+		"DisplayInfo": "BlackWolfGIrl.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		}
+	]
+}

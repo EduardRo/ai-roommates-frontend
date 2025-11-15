@@ -1,0 +1,19 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "10th.moc3",
+		"Textures": [
+			"10th.4096/texture_00.png",
+			"10th.4096/texture_01.png"
+		],
+		"Physics": "10th.physics3.json",
+		"DisplayInfo": "10th.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		}
+	]
+}

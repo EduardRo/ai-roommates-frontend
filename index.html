@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+
+    <!-- ✅ Keep only Cubism Core v5 (required for .model3.json models; your logs confirm it's loading) -->
+    <script src="/live2d/lib/live2dcubismcore.min.js"></script>
+    <script src="/live2d/lib/live2d.min.js"></script>
+    <!-- ❌ Removed: Old Pixi min.js (conflicts with npm v7), live2d-widget (Cubism 2 legacy), index.min.js (old framework), pixi.min.js (duplicate) -->
+  </body>
+</html>
