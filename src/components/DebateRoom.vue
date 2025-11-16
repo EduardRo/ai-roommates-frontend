@@ -1,12 +1,19 @@
-<!-- src/components/DebateRoom.vue -->
+<!-- src/components/DebateRoom.vue (FINAL VERSION - FIXED BUBBLE) -->
 <template>
   <div class="debate-room">
     <h1>AI Debate Room</h1>
-
-    <!-- The single shared canvas for all characters -->
     <canvas ref="sharedCanvasRef" class="shared-live2d-canvas" />
 
+    <!-- ✅ 1. The HTML is now simpler. The style binding has been removed. -->
+    <div v-if="currentSpeech" class="speech-bubble-container">
+      <div class="speech-bubble">
+        <span class="character-name">{{ currentSpeech.characterName }}:</span>
+        <span class="speech-text">{{ currentSpeech.text }}</span>
+      </div>
+    </div>
+
     <div class="controls">
+      <!-- (Controls are unchanged) -->
       <div>
         <label for="topic">Debate Topic:</label>
         <input id="topic" v-model="debateConfig.topic" type="text" :disabled="debateStatus === 'active'" />
@@ -16,12 +23,8 @@
         <span>{{ debateConfig.characters.join(', ') }}</span>
       </div>
       <div>
-        <button @click="startDebate" :disabled="debateStatus === 'active'">
-          {{ debateStatus === 'active' ? 'Debate Active' : 'Start Debate' }}
-        </button>
-        <button @click="stopDebate" :disabled="debateStatus !== 'active'">
-          Stop Debate
-        </button>
+        <button @click="startDebate" :disabled="debateStatus === 'active'">Start Debate</button>
+        <button @click="stopDebate" :disabled="debateStatus !== 'active'">Stop Debate</button>
       </div>
       <div class="status">
         Status: <strong>{{ debateStatus }}</strong>
@@ -29,194 +32,121 @@
       </div>
     </div>
 
-    <!-- Render the character components (they will add their models to the shared canvas) -->
-    <div class="character-placeholders"> <!-- Optional: For UI layout/debugging -->
+    <div class="character-placeholders">
       <DebateCharacter v-for="config in characterConfigs" :key="config.id"
-        :ref="el => registerCharacterRef(config.id, el)" :character-id="config.id" :model-path="config.modelPath" />
+        :ref="el => registerCharacterRef(config.id, el)" :character-id="config.id" :model-path="config.modelPath"
+        @playback-finished="handlePlaybackFinished" />
     </div>
   </div>
 </template>
 
 <script setup>
+// ✅ 2. 'computed' is no longer needed for the bubble, so it's removed from the import.
 import { onMounted, onUnmounted, ref, nextTick } from 'vue';
 import DebateCharacter from './DebateCharacter.vue';
-// Import the composable to get canvas ref and initialization functions
 import { usePixiApp } from '@/composables/usePixiApp';
-// Import your service if needed for WebSocket
-// import { debateService } from '@/services/debateService';
+// ✅ The render config is no longer needed for the bubble's position.
+// import { characterRenderConfig } from '@/config/characterRenderConfig';
 
-// Use the composable to get canvas ref and initialization functions
 const { canvasRef: sharedCanvasRef, initApp, destroyApp } = usePixiApp();
 
-// Configuration for the debate
 const debateConfig = ref({
   topic: 'Is AI consciousness possible?',
   characters: ['aria', 'sera', 'eidon']
 });
 
-// Character configurations (model paths, etc.)
 const characterConfigs = ref([
-  { id: 'aria', modelPath: '/avatars/aria/BlackWolfGIrl.model3.json' },
-  { id: 'sera', modelPath: '/avatars/sera/Snow Leopard.model3.json' },
-  { id: 'eidon', modelPath: '/avatars/eidon/10th.model3.json' }
+  { id: 'aria', name: 'Aria', modelPath: '/avatars/aria/BlackWolfGIrl.model3.json' },
+  { id: 'sera', name: 'Sera', modelPath: '/avatars/sera/Snow Leopard.model3.json' },
+  { id: 'eidon', name: 'Eidon', modelPath: '/avatars/eidon/10th.model3.json' }
 ]);
 
-const debateStatus = ref('idle'); // idle, active, stopped, error
+const debateStatus = ref('idle');
 const debateId = ref(null);
-const characterRefs = ref({}); // Object to hold references to child components
+const characterRefs = ref({});
+const currentSpeech = ref(null);
 
-// Function to register a child component ref
+// ✅ 3. The entire 'speechBubbleStyle' computed property has been removed.
+// All positioning is now handled directly in CSS for simplicity and reliability.
+
 const registerCharacterRef = (id, componentRef) => {
-  if (componentRef) {
-    characterRefs.value[id] = componentRef;
-    console.log(`[DebateRoom] Registered ref for character: ${id}`, componentRef);
-  } else {
-    // Handle removal if needed, though unlikely in this case
-    delete characterRefs.value[id];
-  }
+  if (componentRef) characterRefs.value[id] = componentRef;
+  else delete characterRefs.value[id];
 };
 
-// Function to handle messages received from the WebSocket
-const handleWebSocketMessage = (message) => {
-  console.log('[DebateRoom] Received WebSocket message:', message);
+const handlePlaybackFinished = () => {
+  currentSpeech.value = null;
+  if (!ws.value || ws.value.readyState !== WebSocket.OPEN) return;
+  ws.value.send(JSON.stringify({ type: 'playback_finished' }));
+};
 
+const handleWebSocketMessage = (message) => {
   if (message.type === 'debate_started') {
     debateStatus.value = 'active';
     debateId.value = message.data.debate_id;
-    console.log('[DebateRoom] Debate started:', message.data.debate_id);
   } else if (message.type === 'character_speaking' || message.type === 'opening_statement') {
-    const characterId = message.data.character_id;
-    console.log(`[DebateRoom] Character ${characterId} is speaking`);
-
-    // Find the correct character component using the object ref
-    const characterComponent = characterRefs.value[characterId];
-    if (characterComponent && typeof characterComponent.onReceiveSpeech === 'function') {
-      characterComponent.onReceiveSpeech(message.data);
-      console.log(`[DebateRoom] Triggered speech for character: ${characterId}`);
-    } else {
-      console.warn(`[DebateRoom] No component or onReceiveSpeech method found for character: ${characterId}`);
-      console.log('Available refs:', characterRefs.value);
-    }
+    currentSpeech.value = {
+      characterId: message.data.character_id,
+      characterName: message.data.character_name,
+      text: message.data.text,
+    };
+    const characterComponent = characterRefs.value[message.data.character_id];
+    if (characterComponent) characterComponent.onReceiveSpeech(message.data);
   } else if (message.type === 'debate_ended') {
     debateStatus.value = 'stopped';
-    debateId.value = null; // Clear debate ID
-    console.log('[DebateRoom] Debate ended:', message.data);
+    debateId.value = null;
+    currentSpeech.value = null;
   } else if (message.type === 'error') {
     debateStatus.value = 'error';
-    console.error('[DebateRoom] Error from backend:', message.message);
   }
 };
 
-// WebSocket connection management
 const ws = ref(null);
 
-// Function to start the debate
 const startDebate = async () => {
-  if (debateStatus.value === 'active') {
-    console.warn('[DebateRoom] Debate already active');
-    return;
-  }
-
-  // Ensure WebSocket is connected
-  if (!ws.value || ws.value.readyState !== WebSocket.OPEN) {
-    console.error('[DebateRoom] WebSocket not connected!');
-    return;
-  }
-
-  try {
-    console.log('[DebateRoom] Attempting to start debate via WebSocket...');
-    const message = {
-      type: 'start_debate',
-      data: {
-        topic: debateConfig.value.topic,
-        characters: debateConfig.value.characters
-      }
-    };
-    ws.value.send(JSON.stringify(message));
-    // Status update will be handled by the 'debate_started' message
-  } catch (error) {
-    console.error('[DebateRoom] Failed to send start debate message:', error);
-    debateStatus.value = 'error';
-  }
+  if (debateStatus.value === 'active' || !ws.value || ws.value.readyState !== WebSocket.OPEN) return;
+  currentSpeech.value = null;
+  ws.value.send(JSON.stringify({ type: 'start_debate', data: debateConfig.value }));
 };
 
-// Function to stop the debate
 const stopDebate = () => {
-  if (debateStatus.value !== 'active' || !debateId.value || !ws.value || ws.value.readyState !== WebSocket.OPEN) {
-    console.warn('[DebateRoom] Cannot stop debate - status:', debateStatus.value, 'Debate ID:', debateId.value, 'WS readyState:', ws.value?.readyState);
-    return;
-  }
-
-  console.log('[DebateRoom] Attempting to stop debate via WebSocket...');
-  const message = {
-    type: 'stop_debate',
-    debate_id: debateId.value
-  };
-  ws.value.send(JSON.stringify(message));
-  // The status will be updated by the handleWebSocketMessage when 'debate_ended' is received
+  if (debateStatus.value !== 'active' || !debateId.value || !ws.value || ws.value.readyState !== WebSocket.OPEN) return;
+  ws.value.send(JSON.stringify({ type: 'stop_debate', debate_id: debateId.value }));
 };
 
-// Setup and cleanup
 onMounted(() => {
-  console.log('[DebateRoom] Component mounted, initializing shared Pixi app and WebSocket.');
-
-  // Initialize the shared PixiJS app
   nextTick(() => initApp());
-
-  // Initialize WebSocket connection
-  const wsUrl = 'ws://127.0.0.1:8000/ws/debate'; // Update if your backend runs elsewhere
-  console.log('[DebateRoom] Attempting to connect to WebSocket:', wsUrl);
+  const wsUrl = 'ws://127.0.0.1:8000/ws/debate';
   ws.value = new WebSocket(wsUrl);
-
-  ws.value.onopen = () => {
-    console.log('[DebateRoom] WebSocket connection opened.');
-    // You could potentially auto-start the debate here if needed, or just enable the button
-  };
-
+  ws.value.onopen = () => console.log('[DebateRoom] WebSocket opened.');
   ws.value.onmessage = (event) => {
-    try {
-      const message = JSON.parse(event.data);
-      handleWebSocketMessage(message);
-    } catch (error) {
-      console.error('[DebateRoom] Error parsing WebSocket message:', error, event.data);
-    }
+    try { handleWebSocketMessage(JSON.parse(event.data)); }
+    catch (error) { console.error('[DebateRoom] Error parsing message:', error); }
   };
-
-  ws.value.onclose = (event) => {
-    console.log('[DebateRoom] WebSocket connection closed:', event.code, event.reason);
-    debateStatus.value = 'idle'; // Reset status on close
-    debateId.value = null; // Clear debate ID
-    // Potentially implement reconnection logic here if needed
+  ws.value.onclose = () => {
+    debateStatus.value = 'idle';
+    debateId.value = null;
+    currentSpeech.value = null;
   };
-
-  ws.value.onerror = (error) => {
-    console.error('[DebateRoom] WebSocket error:', error);
-    debateStatus.value = 'error';
-  };
+  ws.value.onerror = () => { debateStatus.value = 'error'; };
 });
 
 onUnmounted(() => {
-  console.log('[DebateRoom] Component unmounted, destroying shared Pixi app and closing WebSocket.');
   destroyApp();
-
-  if (ws.value) {
-    ws.value.close(1000, "Client disconnecting"); // 1000 = normal closure
-    ws.value = null;
-  }
+  if (ws.value) ws.value.close(1000, "Client disconnecting");
 });
 </script>
 
 <style scoped>
 .debate-room {
   position: relative;
-  /* Needed for absolute canvas positioning */
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  /* Prevent scrollbars if canvas overflows */
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url('/backgrounds/new_background-min.jpg');
 }
 
 .shared-live2d-canvas {
@@ -226,23 +156,71 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   z-index: 1;
-  /* Behind other UI elements */
+}
+
+/* ✅ 4. REWRITTEN & SIMPLIFIED CSS for the fixed bubble */
+
+/* This container is now responsible for placing the bubble at the bottom
+   of the screen and ensuring it's centered. */
+.speech-bubble-container {
+  position: absolute;
+  bottom: 1%;
+  /* Position 5% from the bottom of the screen */
+  left: 0;
+  right: 0;
+  z-index: 20;
   pointer-events: none;
-  /* So UI elements can be clicked over the canvas */
+  display: flex;
+  /* Using flexbox is the easiest way to center a child */
+  justify-content: center;
+  /* This horizontally centers the .speech-bubble */
+  padding: 0 20px;
+  /* Adds space on the sides for very narrow screens */
+}
+
+/* The bubble itself now has no positioning logic. It just defines its own appearance. */
+.speech-bubble {
+  width: auto;
+  /* Width is determined by content */
+  min-width: 300px;
+  max-width: 950px;
+  /* Can be wider now that it is centered */
+  background-color: rgba(10, 20, 40, 0.9);
+  /* Slightly more opaque for readability */
+  color: white;
+  padding: 15px 25px;
+  border-radius: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+  /* Center the text inside the bubble */
+  border: 1px solid rgba(120, 180, 255, 0.4);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* The little triangle no longer makes sense visually, so it has been removed. */
+
+.speech-bubble .character-name {
+  font-weight: 700;
+  color: #82c8ff;
+  display: block;
+  /* Puts the name on its own line */
+  margin-bottom: 8px;
+  /* Adds space between name and text */
+  font-size: 20px;
 }
 
 .controls {
   position: relative;
   z-index: 10;
-  /* Above canvas */
-  margin-bottom: 20px;
+  margin-top: 20px;
   padding: 15px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border-radius: 8px;
-  width: 80%;
   max-width: 800px;
-  text-align: center;
 }
 
 .status {
@@ -251,13 +229,6 @@ onUnmounted(() => {
 }
 
 .character-placeholders {
-  position: relative;
-  z-index: 5;
-  /* Above canvas, below controls */
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  /* Hide if you don't want placeholder UI boxes */
   display: none;
 }
 </style>
