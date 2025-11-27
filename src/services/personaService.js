@@ -23,7 +23,14 @@ export async function getAiResponse(sessionId, userInput) {
  * @param {string|null} audioB64 - Base64-encoded audio from backend
  * @returns {Promise<Audio|Object>} Audio object with play/stop methods
  */
-export async function getAudio(text, audioB64 = null) {
+/**
+ * Handles audio generation with backend-first priority
+ * @param {string} text - Text to convert to speech (fallback only)
+ * @param {string|null} audioB64 - Base64-encoded audio from backend
+ * @param {string[]} voiceKeywords - Keywords to select system voice (e.g. ['male', 'david'])
+ * @returns {Promise<Audio|Object>} Audio object with play/stop methods
+ */
+export async function getAudio(text, audioB64 = null, voiceKeywords = []) {
   console.log('[getAudio] Received text:', text)
   console.log('[getAudio] Backend audio present:', !!audioB64)
 
@@ -61,66 +68,18 @@ export async function getAudio(text, audioB64 = null) {
     }
   }
 
-  // 🎯 PRIORITY 2: Try ElevenLabs (if API key present)
-  const apiKey = import.meta.env.VITE_ELEVENLABS_API_KEY
-  const voiceId = import.meta.env.VITE_VOICEID
-
-  if (!text) return null
-
-  if (apiKey && voiceId) {
-    console.log('[getAudio] Trying ElevenLabs TTS with voice:', voiceId)
-    try {
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: 'POST',
-        headers: {
-          'xi-api-key': apiKey,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text,
-          model_id: 'eleven_monolingual_v1',
-          voice_settings: {
-            stability: 0.3,
-            similarity_boost: 0.8,
-            style: 0.6,
-            use_speaker_boost: true,
-            speed: 1,
-          },
-        }),
-      })
-
-      if (!response.ok) throw new Error(await response.text())
-
-      console.log('[getAudio] ElevenLabs response received')
-      const audioBlob = await response.blob()
-      const audioUrl = URL.createObjectURL(audioBlob)
-      const audio = new Audio(audioUrl)
-
-      await new Promise((resolve) => {
-        audio.addEventListener('loadedmetadata', resolve, { once: true })
-      })
-
-      const duration = audio.duration || text.split(' ').length / 2
-      audio.durationSec = duration
-
-      console.log('[getAudio] ElevenLabs audio loaded, duration:', duration)
-      return audio
-    } catch (err) {
-      console.warn('[getAudio] ElevenLabs failed, falling back to system voice:', err)
-    }
-  }
-
-  // 🎯 PRIORITY 3: Fallback to browser's built-in TTS
-  console.log('[getAudio] Using system speech synthesis')
-  return createSystemSpeech(text)
+  // 🎯 Use browser's built-in TTS (ElevenLabs removed for now)
+  console.log('[getAudio] Using system speech synthesis with keywords:', voiceKeywords)
+  return createSystemSpeech(text, voiceKeywords)
 }
 
 /**
  * Creates an audio object using browser's Web Speech API
  * @param {string} text - Text to speak
+ * @param {string[]} voiceKeywords - Keywords to filter voices
  * @returns {Object} Audio-like object with play/stop/durationSec
  */
-function createSystemSpeech(text) {
+function createSystemSpeech(text, voiceKeywords = []) {
   let selectedVoice = null
 
   // Wait for voices to be loaded (they load asynchronously)
@@ -136,36 +95,69 @@ function createSystemSpeech(text) {
     })
   }
 
-  async function play() {
-    const voices = await getVoices()
-    console.log(
-      '[TTS] Available voices:',
-      voices.map((v) => v.name),
-    )
-
-    // Try to find a female voice
-    selectedVoice =
-      voices.find((v) => /female/i.test(v.name) || /woman|girl/i.test(v.name)) ||
-      voices.find((v) => v.name.toLowerCase().includes('aria')) ||
-      voices.find((v) => v.name.toLowerCase().includes('susan')) ||
-      voices[0] // fallback
-
-    console.log('[TTS] Selected voice:', selectedVoice?.name)
-
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.voice = selectedVoice
-    utterance.rate = 1
-    utterance.pitch = 1.05
-    utterance.volume = 1
-
-    speechSynthesis.cancel() // Clear any previous speech
-    console.log('[TTS] Speaking:', text.substring(0, 50) + '...')
-    speechSynthesis.speak(utterance)
-  }
-
-  return {
-    play,
-    stop: () => speechSynthesis.cancel(),
+  const audioObj = {
+    onended: null,
+    onerror: null,
     durationSec: text.split(' ').length / 2, // Rough estimate
+
+    play: async () => {
+      const voices = await getVoices()
+      console.log(
+        '[TTS] Available voices:',
+        voices.map((v) => v.name),
+      )
+
+      // Try to find a voice matching keywords
+      if (voiceKeywords && voiceKeywords.length > 0) {
+        for (const keyword of voiceKeywords) {
+          const match = voices.find((v) => v.name.toLowerCase().includes(keyword.toLowerCase()))
+          if (match) {
+            selectedVoice = match
+            break
+          }
+        }
+      }
+
+      // Fallback logic if no keyword match
+      if (!selectedVoice) {
+        selectedVoice =
+          voices.find((v) => /female/i.test(v.name) || /woman|girl/i.test(v.name)) ||
+          voices.find((v) => v.name.toLowerCase().includes('aria')) ||
+          voices.find((v) => v.name.toLowerCase().includes('susan')) ||
+          voices[0] // fallback
+      }
+
+      console.log('[TTS] Selected voice:', selectedVoice?.name)
+
+      const utterance = new SpeechSynthesisUtterance(text)
+      utterance.voice = selectedVoice
+      utterance.rate = 1
+      utterance.pitch = 1.05
+      utterance.volume = 1
+
+      // Hook up events
+      utterance.onend = () => {
+        console.log('[TTS] System speech ended')
+        if (audioObj.onended) audioObj.onended()
+      }
+
+      utterance.onerror = (e) => {
+        console.error('[TTS] System speech error:', e)
+        if (audioObj.onerror) audioObj.onerror(e)
+        // Also call onended to ensure state cleanup
+        if (audioObj.onended) audioObj.onended()
+      }
+
+      speechSynthesis.cancel() // Clear any previous speech
+      console.log('[TTS] Speaking:', text.substring(0, 50) + '...')
+      speechSynthesis.speak(utterance)
+    },
+
+    stop: () => {
+      speechSynthesis.cancel()
+      if (audioObj.onended) audioObj.onended()
+    },
   }
+
+  return audioObj
 }
