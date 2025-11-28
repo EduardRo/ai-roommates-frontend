@@ -141,11 +141,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useEducationStore } from '@/stores/educationStore'
+import { useAuthStore } from '@/stores/authStore'
 import QuestionCard from '@/components/education/QuestionCard.vue'
 import ProgressBar from '@/components/education/ProgressBar.vue'
+import coachService from '@/services/coachService'
+import { apiPost } from '@/utils/apiClient'
 import {
   getWelcomeMessage,
   getPracticeStartMessage,
@@ -159,12 +162,18 @@ import {
 const route = useRoute()
 const router = useRouter()
 const educationStore = useEducationStore()
+const authStore = useAuthStore()
 
 const loading = ref(true)
 const error = ref(null)
 const theoryAnswers = ref([])
 const practiceAnswers = ref([])
 const currentQuestionIndex = ref(0)
+const questionStartTime = ref(null)
+
+// Progress tracking state
+const sessionId = ref(null)
+const lessonStartTime = ref(null)
 
 const currentLesson = computed(() => educationStore.currentLesson)
 const currentPhase = computed(() => educationStore.currentPhase)
@@ -184,6 +193,56 @@ const allQuestionsAnswered = computed(() => {
     practiceAnswers.value.every((answer) => answer !== undefined)
   )
 })
+
+/**
+ * Start session tracking
+ */
+const startSession = async (lessonId) => {
+  if (!authStore.user?.id) return
+
+  try {
+    console.log('[LessonView] Starting session for lesson:', lessonId)
+    const response = await apiPost(`/students/${authStore.user.id}/sessions`, {
+      action: 'start',
+      lesson_id: lessonId,
+    })
+
+    if (response.session_id) {
+      sessionId.value = response.session_id
+      console.log('[LessonView] Session started:', sessionId.value)
+    }
+  } catch (err) {
+    console.error('Failed to start session:', err)
+    // Don't block user flow if session tracking fails
+  }
+}
+
+/**
+ * End session tracking
+ */
+const endSession = async () => {
+  if (!sessionId.value || !authStore.user?.id) return
+
+  try {
+    const duration = lessonStartTime.value
+      ? Math.round((Date.now() - lessonStartTime.value) / 1000)
+      : 0
+
+    console.log('[LessonView] Ending session:', sessionId.value, 'Duration:', duration)
+
+    await apiPost(`/students/${authStore.user.id}/sessions`, {
+      action: 'end',
+      session_id: sessionId.value,
+      duration_seconds: duration,
+      focus_score: 0.85, // Default focus score
+    })
+
+    console.log('[LessonView] Session ended successfully')
+    sessionId.value = null
+  } catch (err) {
+    console.error('Failed to end session:', err)
+  }
+}
 
 /**
  * Initialize lesson
@@ -208,6 +267,23 @@ const initializeLesson = async () => {
       educationStore.currentTheoryContent = currentLesson.value.phase_1_theory.explanation_content
     }
 
+    // Track lesson review if in review mode
+    if (route.query.mode === 'review' && authStore.user?.id) {
+      try {
+        await coachService.trackLessonReview({
+          studentId: authStore.user.id,
+          lessonId,
+        })
+      } catch (err) {
+        console.error('Failed to track lesson review:', err)
+      }
+    }
+
+    // Start session tracking (not for review mode)
+    if (route.query.mode !== 'review' && authStore.user?.id) {
+      await startSession(lessonId)
+    }
+
     // Note: Welcome message and button are triggered by startLessonInteraction
   } catch (err) {
     console.error('Failed to start lesson:', err)
@@ -221,6 +297,7 @@ const started = ref(false)
 
 const startLessonInteraction = () => {
   started.value = true
+  lessonStartTime.value = Date.now() // Start timing the lesson
 
   // Now show the tutor button since lesson has actually started
   educationStore.setTutorButton(true, '💡 Want me to explain this differently?')
@@ -276,6 +353,7 @@ const handleTheoryAnswer = (questionIndex, answerIdx, question) => {
 const startPractice = () => {
   educationStore.startPracticePhase()
   currentQuestionIndex.value = 0
+  questionStartTime.value = Date.now() // Start timer for first question
 
   // Hide help button in practice phase
   educationStore.setTutorButton(false)
@@ -287,7 +365,7 @@ const startPractice = () => {
 /**
  * Handle practice answer
  */
-const handlePracticeAnswer = (answerIndex) => {
+const handlePracticeAnswer = async (answerIndex) => {
   // Prevent changing answer if already answered
   if (practiceAnswers.value[currentQuestionIndex.value] !== undefined) {
     console.log('[LessonView] Answer already selected, ignoring new selection')
@@ -311,6 +389,39 @@ const handlePracticeAnswer = (answerIndex) => {
       'Correct:',
       question.correct_index,
     )
+
+    // Track question attempt
+    const timeSpent = questionStartTime.value
+      ? Math.floor((Date.now() - questionStartTime.value) / 1000)
+      : 0
+
+    // Get student ID robustly
+    const studentId =
+      authStore.user?.id ||
+      authStore.userId ||
+      (localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null)
+
+    if (!studentId) {
+      console.error(
+        '[LessonView] Cannot track question: User ID missing from store and localStorage',
+      )
+    } else {
+      try {
+        await coachService.trackQuestionAttempt({
+          studentId,
+          lessonId: route.params.lessonId,
+          questionId: `q${currentQuestionIndex.value}`,
+          selectedAnswer: answerIndex,
+          correctAnswer: question.correct_index, // Pass explicit correct answer
+          isCorrect,
+          timeSpent,
+          sessionId: sessionId.value,
+        })
+      } catch (err) {
+        console.error('Failed to track question attempt:', err)
+      }
+    }
+
     if (isCorrect) {
       const message = getCorrectAnswerMessage()
       console.log('[LessonView] Setting correct message:', message)
@@ -329,6 +440,7 @@ const handlePracticeAnswer = (answerIndex) => {
 const nextQuestion = () => {
   if (currentQuestionIndex.value < totalQuestions.value - 1) {
     currentQuestionIndex.value++
+    questionStartTime.value = Date.now() // Reset timer for new question
 
     // Milestone message at halfway point
     const halfway = Math.floor(totalQuestions.value / 2)
@@ -355,6 +467,65 @@ const submitLesson = async () => {
   loading.value = true
 
   try {
+    // Calculate final score
+    const correctAnswers = practiceAnswers.value.filter((answer, idx) => {
+      const question = currentLesson.value.phase_2_practice.questions[idx]
+      return answer === question.correct_index
+    }).length
+
+    const finalScore = Math.round((correctAnswers / totalQuestions.value) * 100)
+
+    // Calculate time spent (in seconds)
+    const timeSpent = lessonStartTime.value
+      ? Math.round((Date.now() - lessonStartTime.value) / 1000)
+      : 0
+
+    // Calculate mastery level
+    const calculateMasteryLevel = (score) => {
+      if (score >= 90) return 'mastered'
+      if (score >= 80) return 'proficient'
+      if (score >= 70) return 'developing'
+      return 'needs_practice'
+    }
+
+    // Get student ID robustly
+    const studentId =
+      authStore.user?.id ||
+      authStore.userId ||
+      (localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null)
+
+    // Save progress to backend
+    if (studentId && route.query.mode !== 'review') {
+      try {
+        console.log('[LessonView] Saving lesson progress:', {
+          lesson_id: route.params.lessonId,
+          score: finalScore,
+          time_spent: timeSpent,
+          completed: true,
+          mastery_level: calculateMasteryLevel(finalScore),
+        })
+
+        await apiPost(`/students/${studentId}/progress`, {
+          lesson_id: route.params.lessonId,
+          score: finalScore,
+          time_spent: timeSpent,
+          completed: true,
+          mastery_level: calculateMasteryLevel(finalScore),
+        })
+
+        console.log('[LessonView] Lesson progress saved successfully')
+      } catch (err) {
+        console.error('Failed to save lesson progress:', err)
+        // Don't block user flow if tracking fails
+      }
+    } else if (!studentId) {
+      console.warn('[LessonView] Cannot save progress: User ID missing')
+    }
+
+    // End session
+    await endSession()
+
+    // Update store
     await educationStore.completeLesson()
 
     // Celebration message based on score
@@ -372,6 +543,15 @@ const submitLesson = async () => {
 
 onMounted(() => {
   initializeLesson()
+
+  // End session if user closes/refreshes page
+  window.addEventListener('beforeunload', endSession)
+})
+
+// Cleanup on component unmount
+onBeforeUnmount(async () => {
+  await endSession()
+  window.removeEventListener('beforeunload', endSession)
 })
 </script>
 

@@ -64,6 +64,15 @@
           </div>
         </div>
 
+        <!-- AI Coach Section -->
+        <div class="coach-section">
+          <h3 class="section-title">🤖 Your AI Learning Coach</h3>
+          <div v-if="studentId">
+            <CoachWidget user-type="student" :user-id="studentId" />
+            <ReviewWidget :student-id="studentId" />
+          </div>
+        </div>
+
         <!-- Coming Soon Section -->
         <div class="coming-soon">
           <h3>Coming Soon! 🎉</h3>
@@ -95,6 +104,8 @@
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import CoachWidget from '@/components/dashboard/CoachWidget.vue'
+import ReviewWidget from '@/components/dashboard/ReviewWidget.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -117,6 +128,14 @@ const characterEmoji = computed(() => {
     eidon: '✨',
   }
   return emojiMap[char] || '🎓'
+})
+
+const studentId = computed(() => {
+  return (
+    authStore.user?.id ||
+    authStore.userId ||
+    (localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null)
+  )
 })
 
 onMounted(async () => {
@@ -383,6 +402,18 @@ const startLearning = () => {
   font-size: 16px;
   font-weight: 700;
   color: var(--color-text);
+}
+
+.coach-section {
+  margin-top: 20px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-cyan);
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px var(--color-cyan);
 }
 
 @media (max-width: 768px) {

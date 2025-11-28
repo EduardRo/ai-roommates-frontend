@@ -56,14 +56,19 @@ frontend/src/
 
 ```javascript
 // Student Coach
-POST / api / students / { studentId } / coach / chat;
-GET / api / students / { studentId } / coach / history;
-GET / api / students / { studentId } / coach / insights;
+POST / api / students / { studentId } / coach / chat
+GET / api / students / { studentId } / coach / history
+GET / api / students / { studentId } / coach / insights
 
 // Parent Coach
-POST / api / parents / { parentId } / coach / chat;
-GET / api / parents / { parentId } / children / summary;
-GET / api / parents / { parentId } / coach / history;
+POST / api / parents / { parentId } / coach / chat
+GET / api / parents / { parentId } / children / summary
+GET / api / parents / { parentId } / coach / history
+
+// Tracking & Reviews
+POST / api / students / { studentId } / questions / attempt
+POST / api / students / { studentId } / lessons / { lessonId } / review
+GET / api / students / { studentId } / reviews / recommended
 ```
 
 ### **Request/Response Formats**
@@ -83,9 +88,12 @@ POST /api/students/123/coach/chat
   "response": "I've analyzed your progress...",
   "insights": {
     "performance_summary": {
-      "average_score": 72,
+      "avg_score": 72,
       "trend": "improving",
-      "lessons_completed": 12
+      "lessons_completed": 12,
+      "velocity": 2.5,
+      "strengths": ["Math"],
+      "weaknesses": ["Reading"]
     },
     "neuroscience_tip": "Your brain needs spaced repetition...",
     "recommendations": [
@@ -94,6 +102,31 @@ POST /api/students/123/coach/chat
     ]
   },
   "conversation_id": "uuid"
+}
+```
+
+#### **Student Insights (Dashboard)**
+
+```javascript
+// Request
+GET /api/students/123/coach/insights
+
+// Response
+{
+  "overall_status": "improving",
+  "strengths": ["Math", "Logic"],
+  "struggles": ["History"],
+  "recommendations": [
+    {
+      "lesson_id": "math_3_2",
+      "urgency": 15.5,
+      "days_overdue": 2
+    }
+  ],
+  "weekly_stats": {
+    "lessons": 5,
+    "average": 85.5
+  }
 }
 ```
 
@@ -121,6 +154,28 @@ POST /api/parents/456/coach/chat
     ]
   },
   "conversation_id": "uuid"
+}
+```
+
+#### **Question Tracking**
+
+```javascript
+// Request
+POST /api/students/123/questions/attempt
+{
+  "lesson_id": "math_101",
+  "question_id": "q_1",
+  "student_answer": "42",
+  "correct_answer": "42",
+  "time_spent": 15, // seconds
+  "session_id": 456 // optional
+}
+
+// Response
+{
+  "success": true,
+  "is_correct": true,
+  "attempt_number": 1
 }
 ```
 
@@ -163,12 +218,7 @@ POST /api/parents/456/coach/chat
 
     <!-- Messages -->
     <div class="messages-container" ref="messagesContainer">
-      <MessageBubble
-        v-for="msg in messages"
-        :key="msg.id"
-        :message="msg"
-        :user-type="userType"
-      />
+      <MessageBubble v-for="msg in messages" :key="msg.id" :message="msg" :user-type="userType" />
 
       <!-- Loading indicator -->
       <div v-if="isLoading" class="loading-message">
@@ -177,42 +227,26 @@ POST /api/parents/456/coach/chat
     </div>
 
     <!-- Insights (student only) -->
-    <InsightCard
-      v-if="userType === 'student' && currentInsights"
-      :insights="currentInsights"
-    />
+    <InsightCard v-if="userType === 'student' && currentInsights" :insights="currentInsights" />
 
     <!-- Summary (parent only) -->
     <div v-if="userType === 'parent' && currentSummary" class="summary-card">
       <h3>Quick Summary</h3>
       <div class="status">Status: {{ currentSummary.overall_status }}</div>
-      <div class="strengths">
-        Strengths: {{ currentSummary.key_strengths.join(", ") }}
-      </div>
-      <div class="support">
-        Needs Support: {{ currentSummary.areas_to_support.join(", ") }}
-      </div>
+      <div class="strengths">Strengths: {{ currentSummary.key_strengths.join(', ') }}</div>
+      <div class="support">Needs Support: {{ currentSummary.areas_to_support.join(', ') }}</div>
     </div>
 
     <!-- Input -->
     <div class="chat-input">
-      <QuickActions
-        v-if="messages.length === 0"
-        :user-type="userType"
-        @select="sendMessage"
-      />
+      <QuickActions v-if="messages.length === 0" :user-type="userType" @select="sendMessage" />
       <textarea
         v-model="messageInput"
         @keydown.enter.prevent="sendMessage"
         placeholder="Ask your coach..."
         rows="2"
       ></textarea>
-      <button
-        @click="sendMessage"
-        :disabled="!messageInput.trim() || isLoading"
-      >
-        Send
-      </button>
+      <button @click="sendMessage" :disabled="!messageInput.trim() || isLoading">Send</button>
     </div>
   </div>
 </template>
@@ -368,17 +402,11 @@ onMounted(async () => {
             message.insights.performance_summary.trend
           }})
         </div>
-        <div
-          v-if="message.insights.neuroscience_tip"
-          class="insight-item neuroscience"
-        >
+        <div v-if="message.insights.neuroscience_tip" class="insight-item neuroscience">
           <strong>🧠 Neuroscience Tip:</strong>
           {{ message.insights.neuroscience_tip }}
         </div>
-        <div
-          v-if="message.insights.recommendations?.length"
-          class="recommendations"
-        >
+        <div v-if="message.insights.recommendations?.length" class="recommendations">
           <strong>💡 Recommendations:</strong>
           <ul>
             <li v-for="(rec, i) in message.insights.recommendations" :key="i">
@@ -414,7 +442,7 @@ onMounted(async () => {
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   message: {
@@ -425,20 +453,20 @@ const props = defineProps({
     type: String,
     required: true,
   },
-});
+})
 
 const formattedMessage = computed(() => {
   // Convert markdown-style formatting to HTML
   return props.message.message
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\n/g, "<br>");
-});
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>')
+})
 
 function formatTime(timestamp) {
-  return new Date(timestamp).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  return new Date(timestamp).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  })
 }
 </script>
 
@@ -528,7 +556,7 @@ function formatTime(timestamp) {
 
 ```javascript
 {
-  userType: "student" | "parent";
+  userType: 'student' | 'parent'
 }
 ```
 
@@ -552,36 +580,36 @@ function formatTime(timestamp) {
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   userType: {
     type: String,
     required: true,
   },
-});
+})
 
-const emit = defineEmits(["select"]);
+const emit = defineEmits(['select'])
 
 const actions = computed(() => {
-  if (props.userType === "student") {
+  if (props.userType === 'student') {
     return [
-      "How am I doing overall?",
-      "What should I study next?",
-      "Why am I struggling with this topic?",
-      "How can I remember things better?",
-      "Am I studying too fast or too slow?",
-    ];
+      'How am I doing overall?',
+      'What should I study next?',
+      'Why am I struggling with this topic?',
+      'How can I remember things better?',
+      'Am I studying too fast or too slow?',
+    ]
   } else {
     return [
-      "How is my child doing?",
-      "What should we focus on this week?",
-      "Is my child studying enough?",
-      "How can I help with homework?",
-      "Should I be worried about anything?",
-    ];
+      'How is my child doing?',
+      'What should we focus on this week?',
+      'Is my child studying enough?',
+      'How can I help with homework?',
+      'Should I be worried about anything?',
+    ]
   }
-});
+})
 </script>
 
 <style scoped>
@@ -638,12 +666,13 @@ const actions = computed(() => {
     </div>
 
     <div class="widget-content">
-      <!-- Latest insight -->
-      <div v-if="latestInsight" class="latest-insight">
-        <p class="insight-text">{{ latestInsight }}</p>
+      <!-- Latest insight (Student) -->
+      <div v-if="userType === 'student' && topRecommendation" class="latest-insight">
+        <p class="insight-label">💡 Recommendation:</p>
+        <p class="insight-text">{{ topRecommendation }}</p>
       </div>
 
-      <!-- Quick stats (student) -->
+      <!-- Quick stats (Student) -->
       <div v-if="userType === 'student'" class="quick-stats">
         <div class="stat">
           <span class="stat-label">This Week:</span>
@@ -655,13 +684,9 @@ const actions = computed(() => {
         </div>
       </div>
 
-      <!-- Quick stats (parent) -->
+      <!-- Quick stats (Parent) -->
       <div v-if="userType === 'parent'" class="children-summary">
-        <div
-          v-for="child in childrenSummary"
-          :key="child.id"
-          class="child-stat"
-        >
+        <div v-for="child in childrenSummary" :key="child.id" class="child-stat">
           <span class="child-name">{{ child.name }}:</span>
           <span :class="['status-badge', child.status]">
             {{ child.status }}
@@ -676,9 +701,9 @@ const actions = computed(() => {
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { useCoachStore } from "@/stores/coachStore";
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useCoachStore } from '@/stores/coachStore'
 
 const props = defineProps({
   userType: {
@@ -689,19 +714,27 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-});
+})
 
-const router = useRouter();
-const coachStore = useCoachStore();
+const router = useRouter()
+const coachStore = useCoachStore()
 
-const latestInsight = ref("");
-const weeklyStats = ref({ lessons: 0, average: 0 });
-const childrenSummary = ref([]);
+const recommendations = ref([])
+const weeklyStats = ref({ lessons: 0, average: 0 })
+const childrenSummary = ref([])
+
+const topRecommendation = computed(() => {
+  if (recommendations.value.length > 0) {
+    const rec = recommendations.value[0]
+    // Format: "Review [lesson_id] (Overdue by X days)"
+    return `Review lesson ${rec.lesson_id} (Overdue by ${rec.days_overdue} days)`
+  }
+  return null
+})
 
 function openCoach() {
-  const route =
-    props.userType === "student" ? "/student/coach" : "/parent/coach";
-  router.push(route);
+  const route = props.userType === 'student' ? '/student/coach' : '/parent/coach'
+  router.push(route)
 }
 
 onMounted(async () => {
@@ -709,15 +742,15 @@ onMounted(async () => {
   const insights = await coachStore.getQuickInsights({
     userType: props.userType,
     userId: props.userId,
-  });
+  })
 
-  if (props.userType === "student") {
-    latestInsight.value = insights.latest_tip;
-    weeklyStats.value = insights.weekly_stats;
+  if (props.userType === 'student') {
+    recommendations.value = insights.recommendations || []
+    weeklyStats.value = insights.weekly_stats || { lessons: 0, average: 0 }
   } else {
-    childrenSummary.value = insights.children_summary;
+    childrenSummary.value = insights // Parent endpoint returns array directly
   }
-});
+})
 </script>
 
 <style scoped>
@@ -795,17 +828,223 @@ onMounted(async () => {
 </style>
 ```
 
+### 5. **ReviewWidget.vue** (Dashboard)
+
+**Purpose**: Display lessons that need spaced repetition review
+
+**Template**:
+
+```vue
+<template>
+  <div class="review-widget" v-if="reviews.length > 0">
+    <div class="widget-header">
+      <h3>🧠 Memory Boost</h3>
+      <span class="badge">{{ reviews.length }} due</span>
+    </div>
+
+    <div class="review-list">
+      <div v-for="review in reviews" :key="review.lesson_id" class="review-item">
+        <div class="review-info">
+          <span class="lesson-id">{{ formatLessonId(review.lesson_id) }}</span>
+          <span class="overdue-tag" :class="{ urgent: review.urgency > 20 }">
+            {{ formatOverdue(review.days_overdue) }}
+          </span>
+        </div>
+        <button @click="startReview(review.lesson_id)" class="review-btn">Review</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useCoachStore } from '@/stores/coachStore'
+
+const props = defineProps({
+  studentId: { type: Number, required: true },
+})
+
+const router = useRouter()
+const coachStore = useCoachStore()
+const reviews = ref([])
+
+function formatLessonId(id) {
+  // Convert "math_3_2" to "Math 3.2"
+  return id
+    .replace(/_/g, ' ')
+    .replace(/(\w)(\w*)/g, (g0, g1, g2) => g1.toUpperCase() + g2.toLowerCase())
+}
+
+function formatOverdue(days) {
+  if (days <= 0) return 'Due today'
+  return `${days} day${days > 1 ? 's' : ''} overdue`
+}
+
+function startReview(lessonId) {
+  router.push({
+    name: 'LessonView',
+    params: { id: lessonId },
+    query: { mode: 'review' },
+  })
+}
+
+onMounted(async () => {
+  reviews.value = await coachStore.getReviewRecommendations(props.studentId)
+})
+</script>
+
+<style scoped>
+.review-widget {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border-left: 4px solid #6610f2;
+}
+
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  background: #6610f2;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.review-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.review-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-id {
+  font-weight: bold;
+}
+
+.overdue-tag {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.overdue-tag.urgent {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.review-btn {
+  padding: 0.4rem 1rem;
+  background: white;
+  border: 1px solid #6610f2;
+  color: #6610f2;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.review-btn:hover {
+  background: #6610f2;
+  color: white;
+}
+</style>
+```
+
 ---
 
-## Store Implementation
+## Tracking Integration
+
+To enable detailed analytics, integrate tracking calls into existing components.
+
+### **1. Question Tracking (In QuizComponent.vue)**
+
+Add this logic when a student submits an answer:
+
+```javascript
+// In your submitAnswer method
+async function submitAnswer(questionId, answer) {
+  const timeSpent = (Date.now() - this.questionStartTime) / 1000
+
+  // 1. Existing logic (check answer, update local state)
+  const isCorrect = checkAnswer(answer)
+
+  // 2. NEW: Send tracking data to backend
+  try {
+    await apiClient.post(`/api/students/${studentId}/questions/attempt`, {
+      lesson_id: currentLessonId,
+      question_id: questionId,
+      student_answer: answer,
+      correct_answer: correctAnswer,
+      time_spent: Math.round(timeSpent),
+      session_id: currentSessionId, // if available
+    })
+  } catch (e) {
+    console.error('Failed to track question:', e)
+    // Don't block the user flow if tracking fails
+  }
+}
+```
+
+### **2. Review Tracking (In LessonView.vue)**
+
+When a lesson is completed in "review mode":
+
+```javascript
+// In your completeLesson method
+async function completeLesson(score) {
+  // Check if this was a review session
+  const isReviewMode = this.$route.query.mode === 'review'
+
+  if (isReviewMode) {
+    try {
+      await apiClient.post(`/api/students/${studentId}/lessons/${lessonId}/review`, {
+        score: score,
+      })
+    } catch (e) {
+      console.error('Failed to track review:', e)
+    }
+  }
+
+  // Continue with normal completion logic...
+}
+```
+
+---
+
+## Store Implementation (Additions)
+
+Add these actions to `coachStore.js`:
+
+```javascript
+async getReviewRecommendations(studentId) {
+  try {
+    const response = await apiClient.get(`/api/students/${studentId}/reviews/recommended`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to get reviews:", error);
+    return [];
+  }
+}
+```
 
 ### **coachStore.js**
 
 ```javascript
-import { defineStore } from "pinia";
-import coachService from "@/services/coachService";
+import { defineStore } from 'pinia'
+import coachService from '@/services/coachService'
 
-export const useCoachStore = defineStore("coach", {
+export const useCoachStore = defineStore('coach', {
   state: () => ({
     messages: [],
     currentConversationId: null,
@@ -819,18 +1058,18 @@ export const useCoachStore = defineStore("coach", {
       this.messages.push({
         id: Date.now(),
         ...message,
-      });
+      })
     },
 
     clearMessages() {
-      this.messages = [];
-      this.currentConversationId = null;
-      this.currentInsights = null;
-      this.currentSummary = null;
+      this.messages = []
+      this.currentConversationId = null
+      this.currentInsights = null
+      this.currentSummary = null
     },
 
     async sendMessage({ userType, userId, childId, message }) {
-      this.isLoading = true;
+      this.isLoading = true
       try {
         const response = await coachService.sendMessage({
           userType,
@@ -838,19 +1077,19 @@ export const useCoachStore = defineStore("coach", {
           childId,
           message,
           conversationId: this.currentConversationId,
-        });
+        })
 
-        this.currentConversationId = response.conversation_id;
+        this.currentConversationId = response.conversation_id
 
-        if (userType === "student") {
-          this.currentInsights = response.insights;
+        if (userType === 'student') {
+          this.currentInsights = response.insights
         } else {
-          this.currentSummary = response.summary;
+          this.currentSummary = response.summary
         }
 
-        return response;
+        return response
       } finally {
-        this.isLoading = false;
+        this.isLoading = false
       }
     },
 
@@ -860,12 +1099,12 @@ export const useCoachStore = defineStore("coach", {
           userType,
           userId,
           childId,
-        });
+        })
 
-        this.messages = history.messages || [];
-        this.currentConversationId = history.conversation_id;
+        this.messages = history.messages || []
+        this.currentConversationId = history.conversation_id
       } catch (error) {
-        console.error("Failed to load history:", error);
+        console.error('Failed to load history:', error)
       }
     },
 
@@ -874,14 +1113,14 @@ export const useCoachStore = defineStore("coach", {
         return await coachService.getQuickInsights({
           userType,
           userId,
-        });
+        })
       } catch (error) {
-        console.error("Failed to get insights:", error);
-        return {};
+        console.error('Failed to get insights:', error)
+        return {}
       }
     },
   },
-});
+})
 ```
 
 ---
@@ -891,49 +1130,49 @@ export const useCoachStore = defineStore("coach", {
 ### **coachService.js**
 
 ```javascript
-import apiClient from "./apiClient";
+import apiClient from './apiClient'
 
 export default {
   async sendMessage({ userType, userId, childId, message, conversationId }) {
     const endpoint =
-      userType === "student"
+      userType === 'student'
         ? `/api/students/${userId}/coach/chat`
-        : `/api/parents/${userId}/coach/chat`;
+        : `/api/parents/${userId}/coach/chat`
 
     const payload = {
       message,
       conversation_id: conversationId,
-    };
-
-    if (userType === "parent" && childId) {
-      payload.child_id = childId;
     }
 
-    const response = await apiClient.post(endpoint, payload);
-    return response.data;
+    if (userType === 'parent' && childId) {
+      payload.child_id = childId
+    }
+
+    const response = await apiClient.post(endpoint, payload)
+    return response.data
   },
 
   async getHistory({ userType, userId, childId }) {
     const endpoint =
-      userType === "student"
+      userType === 'student'
         ? `/api/students/${userId}/coach/history`
-        : `/api/parents/${userId}/coach/history`;
+        : `/api/parents/${userId}/coach/history`
 
-    const params = childId ? { child_id: childId } : {};
-    const response = await apiClient.get(endpoint, { params });
-    return response.data;
+    const params = childId ? { child_id: childId } : {}
+    const response = await apiClient.get(endpoint, { params })
+    return response.data
   },
 
   async getQuickInsights({ userType, userId }) {
     const endpoint =
-      userType === "student"
+      userType === 'student'
         ? `/api/students/${userId}/coach/insights`
-        : `/api/parents/${userId}/children/summary`;
+        : `/api/parents/${userId}/children/summary`
 
-    const response = await apiClient.get(endpoint);
-    return response.data;
+    const response = await apiClient.get(endpoint)
+    return response.data
   },
-};
+}
 ```
 
 ---
@@ -973,12 +1212,12 @@ export default {
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useAuthStore } from "@/stores/authStore";
-import ChatInterface from "@/components/coach/ChatInterface.vue";
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+import ChatInterface from '@/components/coach/ChatInterface.vue'
 
-const authStore = useAuthStore();
-const currentStudent = computed(() => authStore.currentUser);
+const authStore = useAuthStore()
+const currentStudent = computed(() => authStore.currentUser)
 </script>
 
 <style scoped>
@@ -1014,24 +1253,20 @@ const currentStudent = computed(() => authStore.currentUser);
     </div>
 
     <div class="coach-container">
-      <ChatInterface
-        user-type="parent"
-        :user-id="currentParent.id"
-        :child-id="selectedChildId"
-      />
+      <ChatInterface user-type="parent" :user-id="currentParent.id" :child-id="selectedChildId" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { useAuthStore } from "@/stores/authStore";
-import ChatInterface from "@/components/coach/ChatInterface.vue";
+import { ref, computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+import ChatInterface from '@/components/coach/ChatInterface.vue'
 
-const authStore = useAuthStore();
-const currentParent = computed(() => authStore.currentUser);
-const children = computed(() => authStore.children || []);
-const selectedChildId = ref(null);
+const authStore = useAuthStore()
+const currentParent = computed(() => authStore.currentUser)
+const children = computed(() => authStore.children || [])
+const selectedChildId = ref(null)
 </script>
 
 <style scoped>

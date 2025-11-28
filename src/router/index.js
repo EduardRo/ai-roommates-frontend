@@ -30,6 +30,12 @@ const router = createRouter({
       component: () => import('../views/ParentDashboardView.vue'),
       meta: { requiresParent: true },
     },
+    {
+      path: '/parent/coach',
+      name: 'parent-coach',
+      component: () => import('../views/ParentCoachView.vue'),
+      meta: { requiresParent: true },
+    },
     // Student routes
     {
       path: '/student/login',
@@ -41,6 +47,12 @@ const router = createRouter({
       path: '/student/dashboard',
       name: 'student-dashboard',
       component: () => import('../views/StudentDashboardView.vue'),
+      meta: { requiresStudent: true },
+    },
+    {
+      path: '/student/coach',
+      name: 'student-coach',
+      component: () => import('../views/StudentCoachView.vue'),
       meta: { requiresStudent: true },
     },
     // Educational Tutor routes
