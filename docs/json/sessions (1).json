@@ -1,0 +1,9 @@
+[
+{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"education_tutor"},
+{"type":"table","name":"sessions","database":"education_tutor","data":
+[
+{"id":"1","student_id":"2","session_token":"a22b21fa-180e-40bc-a77c-fa862dc05c89","websocket_id":null,"current_lesson_id":null,"current_phase":null,"session_data":null,"is_active":"1","device_info":"Chrome\/142.0.0.0 Safari\/537.36","ip_address":null,"started_at":"2025-11-29 08:39:20","last_activity":"2025-11-29 08:52:20","ended_at":null,"time_of_day":null,"day_of_week":null,"hours_since_last_session":null}
+]
+}
+]

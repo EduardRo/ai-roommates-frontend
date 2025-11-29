@@ -1,11 +1,15 @@
 <script setup>
 import { RouterView, useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { computed, onMounted, onBeforeUnmount } from 'vue'
 import AiTutor from './components/education/AiTutor.vue'
 import { useEducationStore } from './stores/educationStore'
+import { useAuthStore } from './stores/authStore'
+import { useMetricsStore } from './stores/metricsStore'
 
 const route = useRoute()
 const educationStore = useEducationStore()
+const authStore = useAuthStore()
+const metricsStore = useMetricsStore()
 
 // Show tutor only on lesson pages
 const showTutor = computed(() => route.path.startsWith('/lesson'))
@@ -20,6 +24,38 @@ const buttonText = computed(() => educationStore.tutorButtonText)
 // Handle button click - trigger explanation request
 const handleTutorButtonClick = () => {
   educationStore.requestAIExplanation()
+}
+
+// Metrics tracking lifecycle
+onMounted(() => {
+  // Start metrics if user is already logged in
+  if (authStore.isAuthenticated) {
+    metricsStore.startTracking()
+  }
+
+  // Listen for tab visibility changes
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+
+  // End session on browser close
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
+
+function handleVisibilityChange() {
+  if (document.visibilityState === 'hidden') {
+    metricsStore.pauseTracking()
+  } else {
+    metricsStore.resumeTracking()
+  }
+}
+
+function handleBeforeUnload() {
+  // End session when browser/tab closes
+  metricsStore.stopTracking('close')
 }
 </script>
 

@@ -55,6 +55,12 @@ const router = createRouter({
       component: () => import('../views/StudentCoachView.vue'),
       meta: { requiresStudent: true },
     },
+    {
+      path: '/student/metrics',
+      name: 'student-metrics',
+      component: () => import('../views/MetricsView.vue'),
+      meta: { requiresStudent: true },
+    },
     // Educational Tutor routes
     {
       path: '/learn/math/grade-4',

@@ -1,0 +1,726 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.1.0
+2 info using node@v23.9.0
+3 silly config load:file:C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\npmrc
+4 silly config load:file:E:\AI-SYNTIA-V5\frontend\.npmrc
+5 silly config load:file:C:\Users\eduar\.npmrc
+6 silly config load:file:C:\Users\eduar\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm install chart.js
+8 verbose argv "install" "chart.js"
+9 verbose logfile logs-max:10 dir:C:\Users\eduar\AppData\Local\npm-cache\_logs\2025-11-29T13_04_34_022Z-
+10 verbose logfile C:\Users\eduar\AppData\Local\npm-cache\_logs\2025-11-29T13_04_34_022Z-debug-0.log
+11 silly logfile start cleaning logs, removing 1 files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly logfile done cleaning log files
+14 silly idealTree buildDeps
+15 silly fetch manifest chart.js@*
+16 silly packumentCache full:https://registry.npmjs.org/chart.js cache-miss
+17 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules
+18 http fetch GET 200 https://registry.npmjs.org/chart.js 362ms (cache revalidated)
+19 silly packumentCache full:https://registry.npmjs.org/chart.js set size:435414 disposed:false
+20 silly placeDep ROOT chart.js@4.5.1 OK for: ai-avatar@0.0.0 want: *
+21 silly fetch manifest @kurkle/color@^0.3.0
+22 silly packumentCache full:https://registry.npmjs.org/@kurkle%2fcolor cache-miss
+23 http fetch GET 200 https://registry.npmjs.org/@kurkle%2fcolor 233ms (cache revalidated)
+24 silly packumentCache full:https://registry.npmjs.org/@kurkle%2fcolor set size:59341 disposed:false
+25 silly placeDep ROOT @kurkle/color@0.3.4 OK for: chart.js@4.5.1 want: ^0.3.0
+26 silly fetch manifest vite@^3.1.0 || ^4.0.0 || ^5.0.0-0 || ^6.0.1
+27 silly packumentCache full:https://registry.npmjs.org/vite cache-miss
+28 http fetch GET 200 https://registry.npmjs.org/vite 203ms (cache revalidated)
+29 silly packumentCache full:https://registry.npmjs.org/vite set size:38619752 disposed:false
+30 silly fetch manifest @types/node@^18.0.0 || ^20.0.0 || >=22.0.0
+31 silly packumentCache full:https://registry.npmjs.org/@types%2fnode cache-miss
+32 http fetch GET 200 https://registry.npmjs.org/@types%2fnode 116ms (cache revalidated)
+33 silly packumentCache full:https://registry.npmjs.org/@types%2fnode set size:10693501 disposed:false
+34 silly fetch manifest jiti@>=1.21.0
+35 silly packumentCache full:https://registry.npmjs.org/jiti cache-miss
+36 http fetch GET 200 https://registry.npmjs.org/jiti 103ms (cache revalidated)
+37 silly packumentCache full:https://registry.npmjs.org/jiti set size:382310 disposed:false
+38 silly fetch manifest less@*
+39 silly packumentCache full:https://registry.npmjs.org/less cache-miss
+40 http fetch GET 200 https://registry.npmjs.org/less 79ms (cache revalidated)
+41 silly packumentCache full:https://registry.npmjs.org/less set size:425893 disposed:false
+42 silly fetch manifest lightningcss@^1.21.0
+43 silly packumentCache full:https://registry.npmjs.org/lightningcss cache-miss
+44 http fetch GET 200 https://registry.npmjs.org/lightningcss 46ms (cache revalidated)
+45 silly packumentCache full:https://registry.npmjs.org/lightningcss set size:173815 disposed:false
+46 silly fetch manifest sass@*
+47 silly packumentCache full:https://registry.npmjs.org/sass cache-miss
+48 http fetch GET 200 https://registry.npmjs.org/sass 54ms (cache revalidated)
+49 silly packumentCache full:https://registry.npmjs.org/sass set size:705319 disposed:false
+50 silly fetch manifest sass-embedded@*
+51 silly packumentCache full:https://registry.npmjs.org/sass-embedded cache-miss
+52 http fetch GET 200 https://registry.npmjs.org/sass-embedded 87ms (cache revalidated)
+53 silly packumentCache full:https://registry.npmjs.org/sass-embedded set size:382956 disposed:false
+54 silly fetch manifest stylus@*
+55 silly packumentCache full:https://registry.npmjs.org/stylus cache-miss
+56 http fetch GET 200 https://registry.npmjs.org/stylus 58ms (cache revalidated)
+57 silly packumentCache full:https://registry.npmjs.org/stylus set size:286766 disposed:false
+58 silly fetch manifest sugarss@*
+59 silly packumentCache full:https://registry.npmjs.org/sugarss cache-miss
+60 http fetch GET 200 https://registry.npmjs.org/sugarss 84ms (cache revalidated)
+61 silly packumentCache full:https://registry.npmjs.org/sugarss set size:44975 disposed:false
+62 silly fetch manifest postcss@^8.3.3
+63 silly packumentCache full:https://registry.npmjs.org/postcss cache-miss
+64 http fetch GET 200 https://registry.npmjs.org/postcss 48ms (cache revalidated)
+65 silly packumentCache full:https://registry.npmjs.org/postcss set size:696248 disposed:false
+66 silly fetch manifest terser@^5.16.0
+67 silly packumentCache full:https://registry.npmjs.org/terser cache-miss
+68 http fetch GET 200 https://registry.npmjs.org/terser 108ms (cache revalidated)
+69 silly packumentCache full:https://registry.npmjs.org/terser set size:780033 disposed:false
+70 silly fetch manifest tsx@^4.8.1
+71 silly packumentCache full:https://registry.npmjs.org/tsx cache-miss
+72 http fetch GET 200 https://registry.npmjs.org/tsx 85ms (cache revalidated)
+73 silly packumentCache full:https://registry.npmjs.org/tsx set size:287318 disposed:false
+74 silly fetch manifest yaml@^2.4.2
+75 silly packumentCache full:https://registry.npmjs.org/yaml cache-miss
+76 http fetch GET 200 https://registry.npmjs.org/yaml 49ms (cache revalidated)
+77 silly packumentCache full:https://registry.npmjs.org/yaml set size:361238 disposed:false
+78 warn ERESOLVE overriding peer dependency {
+78 warn ERESOLVE   code: 'ERESOLVE',
+78 warn ERESOLVE   edge: {
+78 warn ERESOLVE     type: 'peer',
+78 warn ERESOLVE     name: 'vite',
+78 warn ERESOLVE     spec: '^3.1.0 || ^4.0.0 || ^5.0.0-0 || ^6.0.1',
+78 warn ERESOLVE     error: 'INVALID',
+78 warn ERESOLVE     from: {
+78 warn ERESOLVE       name: 'vite-plugin-inspect',
+78 warn ERESOLVE       version: '0.8.9',
+78 warn ERESOLVE       location: 'node_modules/vite-plugin-vue-devtools/node_modules/vite-plugin-inspect',
+78 warn ERESOLVE       isWorkspace: false,
+78 warn ERESOLVE       dependents: [Array]
+78 warn ERESOLVE     }
+78 warn ERESOLVE   },
+78 warn ERESOLVE   dep: {
+78 warn ERESOLVE     name: 'vite',
+78 warn ERESOLVE     version: '6.4.1',
+78 warn ERESOLVE     whileInstalling: {
+78 warn ERESOLVE       name: 'vite-plugin-inspect',
+78 warn ERESOLVE       version: '0.8.9',
+78 warn ERESOLVE       path: 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\vite-plugin-vue-devtools\\node_modules\\vite-plugin-inspect'
+78 warn ERESOLVE     },
+78 warn ERESOLVE     location: 'node_modules/vite',
+78 warn ERESOLVE     isWorkspace: false,
+78 warn ERESOLVE     dependents: [ [Object] ]
+78 warn ERESOLVE   },
+78 warn ERESOLVE   force: false,
+78 warn ERESOLVE   isMine: false,
+78 warn ERESOLVE   strictPeerDeps: false,
+78 warn ERESOLVE   current: {
+78 warn ERESOLVE     name: 'vite',
+78 warn ERESOLVE     version: '7.2.2',
+78 warn ERESOLVE     location: 'node_modules/vite',
+78 warn ERESOLVE     isWorkspace: false,
+78 warn ERESOLVE     dependents: [ [Object], [Object], [Object], [Object], [Object] ]
+78 warn ERESOLVE   },
+78 warn ERESOLVE   peerConflict: {
+78 warn ERESOLVE     current: {
+78 warn ERESOLVE       name: 'vite',
+78 warn ERESOLVE       version: '7.2.2',
+78 warn ERESOLVE       location: 'node_modules/vite',
+78 warn ERESOLVE       isWorkspace: false,
+78 warn ERESOLVE       dependents: [Array]
+78 warn ERESOLVE     },
+78 warn ERESOLVE     peer: {
+78 warn ERESOLVE       name: 'vite',
+78 warn ERESOLVE       version: '6.4.1',
+78 warn ERESOLVE       whileInstalling: [Object],
+78 warn ERESOLVE       location: 'node_modules/vite',
+78 warn ERESOLVE       isWorkspace: false,
+78 warn ERESOLVE       dependents: [Array]
+78 warn ERESOLVE     }
+78 warn ERESOLVE   }
+78 warn ERESOLVE }
+79 silly reify mark retired [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\chart.js' ]
+80 silly reify mark retired [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@kurkle\\color' ]
+81 silly reify moves {
+81 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\chart.js': 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\.chart.js-weVAu1KA',
+81 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@kurkle\\color': 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@kurkle\\.color-6Z5cE9Po'
+81 silly reify }
+82 silly audit bulk request {
+82 silly audit   '@antfu/utils': [ '0.7.10' ],
+82 silly audit   '@babel/code-frame': [ '7.27.1' ],
+82 silly audit   '@babel/compat-data': [ '7.28.5' ],
+82 silly audit   '@babel/core': [ '7.28.5' ],
+82 silly audit   semver: [ '6.3.1', '7.7.3' ],
+82 silly audit   '@babel/generator': [ '7.28.5' ],
+82 silly audit   '@babel/helper-annotate-as-pure': [ '7.27.3' ],
+82 silly audit   '@babel/helper-compilation-targets': [ '7.27.2' ],
+82 silly audit   '@babel/helper-create-class-features-plugin': [ '7.28.5' ],
+82 silly audit   '@babel/helper-globals': [ '7.28.0' ],
+82 silly audit   '@babel/helper-member-expression-to-functions': [ '7.28.5' ],
+82 silly audit   '@babel/helper-module-imports': [ '7.27.1' ],
+82 silly audit   '@babel/helper-module-transforms': [ '7.28.3' ],
+82 silly audit   '@babel/helper-optimise-call-expression': [ '7.27.1' ],
+82 silly audit   '@babel/helper-plugin-utils': [ '7.27.1' ],
+82 silly audit   '@babel/helper-replace-supers': [ '7.27.1' ],
+82 silly audit   '@babel/helper-skip-transparent-expression-wrappers': [ '7.27.1' ],
+82 silly audit   '@babel/helper-string-parser': [ '7.27.1' ],
+82 silly audit   '@babel/helper-validator-identifier': [ '7.28.5' ],
+82 silly audit   '@babel/helper-validator-option': [ '7.27.1' ],
+82 silly audit   '@babel/helpers': [ '7.28.4' ],
+82 silly audit   '@babel/parser': [ '7.28.5' ],
+82 silly audit   '@babel/plugin-proposal-decorators': [ '7.28.0' ],
+82 silly audit   '@babel/plugin-syntax-decorators': [ '7.27.1' ],
+82 silly audit   '@babel/plugin-syntax-import-attributes': [ '7.27.1' ],
+82 silly audit   '@babel/plugin-syntax-import-meta': [ '7.10.4' ],
+82 silly audit   '@babel/plugin-syntax-jsx': [ '7.27.1' ],
+82 silly audit   '@babel/plugin-syntax-typescript': [ '7.27.1' ],
+82 silly audit   '@babel/plugin-transform-typescript': [ '7.28.5' ],
+82 silly audit   '@babel/template': [ '7.27.2' ],
+82 silly audit   '@babel/traverse': [ '7.28.5' ],
+82 silly audit   '@babel/types': [ '7.28.5' ],
+82 silly audit   '@esbuild/aix-ppc64': [ '0.25.12' ],
+82 silly audit   '@esbuild/android-arm': [ '0.25.12' ],
+82 silly audit   '@esbuild/android-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/android-x64': [ '0.25.12' ],
+82 silly audit   '@esbuild/darwin-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/darwin-x64': [ '0.25.12' ],
+82 silly audit   '@esbuild/freebsd-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/freebsd-x64': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-arm': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-ia32': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-loong64': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-mips64el': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-ppc64': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-riscv64': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-s390x': [ '0.25.12' ],
+82 silly audit   '@esbuild/linux-x64': [ '0.25.12' ],
+82 silly audit   '@esbuild/netbsd-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/netbsd-x64': [ '0.25.12' ],
+82 silly audit   '@esbuild/openbsd-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/openbsd-x64': [ '0.25.12' ],
+82 silly audit   '@esbuild/openharmony-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/sunos-x64': [ '0.25.12' ],
+82 silly audit   '@esbuild/win32-arm64': [ '0.25.12' ],
+82 silly audit   '@esbuild/win32-ia32': [ '0.25.12' ],
+82 silly audit   '@esbuild/win32-x64': [ '0.25.12' ],
+82 silly audit   '@eslint-community/eslint-utils': [ '4.9.0' ],
+82 silly audit   'eslint-visitor-keys': [ '3.4.3', '4.2.1' ],
+82 silly audit   '@eslint-community/regexpp': [ '4.12.2' ],
+82 silly audit   '@eslint/config-array': [ '0.21.1' ],
+82 silly audit   '@eslint/config-helpers': [ '0.4.2' ],
+82 silly audit   '@eslint/core': [ '0.17.0' ],
+82 silly audit   '@eslint/eslintrc': [ '3.3.1' ],
+82 silly audit   globals: [ '14.0.0', '16.5.0' ],
+82 silly audit   '@eslint/js': [ '9.39.1' ],
+82 silly audit   '@eslint/object-schema': [ '2.1.7' ],
+82 silly audit   '@eslint/plugin-kit': [ '0.4.1' ],
+82 silly audit   '@humanfs/core': [ '0.19.1' ],
+82 silly audit   '@humanfs/node': [ '0.16.7' ],
+82 silly audit   '@humanwhocodes/module-importer': [ '1.0.1' ],
+82 silly audit   '@humanwhocodes/retry': [ '0.4.3' ],
+82 silly audit   '@jridgewell/gen-mapping': [ '0.3.13' ],
+82 silly audit   '@jridgewell/remapping': [ '2.3.5' ],
+82 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+82 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+82 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+82 silly audit   '@pixi/color': [ '7.4.3' ],
+82 silly audit   '@pixi/colord': [ '2.9.6' ],
+82 silly audit   '@pixi/constants': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/core': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/display': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/extensions': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/loaders': [ '6.5.10' ],
+82 silly audit   '@pixi/math': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/runner': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/settings': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/sprite': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/ticker': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pixi/utils': [ '6.5.10', '7.4.3' ],
+82 silly audit   '@pkgr/core': [ '0.2.9' ],
+82 silly audit   '@polka/url': [ '1.0.0-next.29' ],
+82 silly audit   '@rolldown/pluginutils': [ '1.0.0-beta.29' ],
+82 silly audit   '@rollup/pluginutils': [ '5.3.0' ],
+82 silly audit   '@rollup/rollup-android-arm-eabi': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-android-arm64': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-darwin-arm64': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-darwin-x64': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-freebsd-arm64': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-freebsd-x64': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-arm-gnueabihf': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-arm-musleabihf': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-arm64-gnu': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-arm64-musl': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-loong64-gnu': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-ppc64-gnu': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-riscv64-gnu': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-riscv64-musl': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-s390x-gnu': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-x64-gnu': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-linux-x64-musl': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-openharmony-arm64': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-win32-arm64-msvc': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-win32-ia32-msvc': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-win32-x64-gnu': [ '4.53.2' ],
+82 silly audit   '@rollup/rollup-win32-x64-msvc': [ '4.53.2' ],
+82 silly audit   '@sec-ant/readable-stream': [ '0.4.1' ],
+82 silly audit   '@sindresorhus/merge-streams': [ '4.0.0' ],
+82 silly audit   '@types/css-font-loading-module': [ '0.0.12' ],
+82 silly audit   '@types/earcut': [ '2.1.4' ],
+82 silly audit   '@types/estree': [ '1.0.8' ],
+82 silly audit   '@types/json-schema': [ '7.0.15' ],
+82 silly audit   '@types/offscreencanvas': [ '2019.7.3' ],
+82 silly audit   '@vitejs/plugin-vue': [ '6.0.1' ],
+82 silly audit   '@vue/babel-helper-vue-transform-on': [ '1.5.0' ],
+82 silly audit   '@vue/babel-plugin-jsx': [ '1.5.0' ],
+82 silly audit   '@vue/babel-plugin-resolve-type': [ '1.5.0' ],
+82 silly audit   '@vue/compiler-core': [ '3.5.24' ],
+82 silly audit   '@vue/compiler-dom': [ '3.5.24' ],
+82 silly audit   '@vue/compiler-sfc': [ '3.5.24' ],
+82 silly audit   '@vue/compiler-ssr': [ '3.5.24' ],
+82 silly audit   '@vue/devtools-api': [ '7.7.8', '6.6.4' ],
+82 silly audit   '@vue/devtools-core': [ '7.7.8' ],
+82 silly audit   nanoid: [ '5.1.6', '3.3.11' ],
+82 silly audit   '@vue/devtools-kit': [ '7.7.8' ],
+82 silly audit   '@vue/devtools-shared': [ '7.7.8' ],
+82 silly audit   '@vue/eslint-config-prettier': [ '10.2.0' ],
+82 silly audit   '@vue/reactivity': [ '3.5.24' ],
+82 silly audit   '@vue/runtime-core': [ '3.5.24' ],
+82 silly audit   '@vue/runtime-dom': [ '3.5.24' ],
+82 silly audit   '@vue/server-renderer': [ '3.5.24' ],
+82 silly audit   '@vue/shared': [ '3.5.24' ],
+82 silly audit   '@zennomi/pixi-live2d-display': [ '0.4.1' ],
+82 silly audit   acorn: [ '8.15.0' ],
+82 silly audit   'acorn-jsx': [ '5.3.2' ],
+82 silly audit   ajv: [ '6.12.6' ],
+82 silly audit   'ansi-styles': [ '4.3.0' ],
+82 silly audit   argparse: [ '2.0.1' ],
+82 silly audit   'array-union': [ '1.0.2' ],
+82 silly audit   'array-uniq': [ '1.0.3' ],
+82 silly audit   async: [ '2.6.4' ],
+82 silly audit   'balanced-match': [ '1.0.2' ],
+82 silly audit   'baseline-browser-mapping': [ '2.8.28' ],
+82 silly audit   birpc: [ '2.8.0' ],
+82 silly audit   boolbase: [ '1.0.0' ],
+82 silly audit   'brace-expansion': [ '1.1.12' ],
+82 silly audit   browserslist: [ '4.28.0' ],
+82 silly audit   'bundle-name': [ '4.1.0' ],
+82 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+82 silly audit   'call-bound': [ '1.0.4' ],
+82 silly audit   callsites: [ '3.1.0' ],
+82 silly audit   'caniuse-lite': [ '1.0.30001754' ],
+82 silly audit   chalk: [ '4.1.2' ],
+82 silly audit   'color-convert': [ '2.0.1' ],
+82 silly audit   'color-name': [ '1.1.4' ],
+82 silly audit   commander: [ '2.20.3' ],
+82 silly audit   commondir: [ '1.0.1' ],
+82 silly audit   'concat-map': [ '0.0.1' ],
+82 silly audit   'convert-source-map': [ '2.0.0' ],
+82 silly audit   'copy-anything': [ '4.0.5' ],
+82 silly audit   'cross-spawn': [ '7.0.6' ],
+82 silly audit   cssesc: [ '3.0.0' ],
+82 silly audit   csstype: [ '3.1.3' ],
+82 silly audit   debug: [ '4.4.3' ],
+82 silly audit   'deep-is': [ '0.1.4' ],
+82 silly audit   'default-browser': [ '5.3.0' ],
+82 silly audit   'default-browser-id': [ '5.0.0' ],
+82 silly audit   'define-lazy-prop': [ '3.0.0' ],
+82 silly audit   'dunder-proto': [ '1.0.1' ],
+82 silly audit   earcut: [ '2.2.4' ],
+82 silly audit   'electron-to-chromium': [ '1.5.250' ],
+82 silly audit   'email-addresses': [ '3.1.0' ],
+82 silly audit   entities: [ '4.5.0' ],
+82 silly audit   'error-stack-parser-es': [ '0.1.5' ],
+82 silly audit   'es-define-property': [ '1.0.1' ],
+82 silly audit   'es-errors': [ '1.3.0' ],
+82 silly audit   'es-object-atoms': [ '1.1.1' ],
+82 silly audit   esbuild: [ '0.25.12' ],
+82 silly audit   escalade: [ '3.2.0' ],
+82 silly audit   'escape-string-regexp': [ '4.0.0', '1.0.5' ],
+82 silly audit   eslint: [ '9.39.1' ],
+82 silly audit   'eslint-config-prettier': [ '10.1.8' ],
+82 silly audit   'eslint-plugin-prettier': [ '5.5.4' ],
+82 silly audit   'eslint-plugin-vue': [ '10.2.0' ],
+82 silly audit   'eslint-scope': [ '8.4.0' ],
+82 silly audit   espree: [ '10.4.0' ],
+82 silly audit   esquery: [ '1.6.0' ],
+82 silly audit   esrecurse: [ '4.3.0' ],
+82 silly audit   estraverse: [ '5.3.0' ],
+82 silly audit   'estree-walker': [ '2.0.2' ],
+82 silly audit   esutils: [ '2.0.3' ],
+82 silly audit   eventemitter3: [ '3.1.2', '4.0.7' ],
+82 silly audit   execa: [ '9.6.0' ],
+82 silly audit   'fast-deep-equal': [ '3.1.3' ],
+82 silly audit   'fast-diff': [ '1.3.0' ],
+82 silly audit   'fast-json-stable-stringify': [ '2.1.0' ],
+82 silly audit   'fast-levenshtein': [ '2.0.6' ],
+82 silly audit   fdir: [ '6.5.0' ],
+82 silly audit   figures: [ '6.1.0' ],
+82 silly audit   'file-entry-cache': [ '8.0.0' ],
+82 silly audit   'filename-reserved-regex': [ '2.0.0' ],
+82 silly audit   filenamify: [ '4.3.0' ],
+82 silly audit   'find-cache-dir': [ '3.3.2' ],
+82 silly audit   'find-up': [ '5.0.0', '4.1.0' ],
+82 silly audit   'flat-cache': [ '4.0.1' ],
+82 silly audit   flatted: [ '3.3.3' ],
+82 silly audit   'fs-extra': [ '8.1.0', '11.3.2' ],
+82 silly audit   'fs.realpath': [ '1.0.0' ],
+82 silly audit   fsevents: [ '2.3.3' ],
+82 silly audit   'function-bind': [ '1.1.2' ],
+82 silly audit   gensync: [ '1.0.0-beta.2' ],
+82 silly audit   'get-intrinsic': [ '1.3.0' ],
+82 silly audit   'get-proto': [ '1.0.1' ],
+82 silly audit   'get-stream': [ '9.0.1' ],
+82 silly audit   'gh-pages': [ '4.0.0' ],
+82 silly audit   glob: [ '7.2.3' ],
+82 silly audit   'glob-parent': [ '6.0.2' ],
+82 silly audit   globby: [ '6.1.0' ],
+82 silly audit   gopd: [ '1.2.0' ],
+82 silly audit   'graceful-fs': [ '4.2.11' ],
+82 silly audit   'has-flag': [ '4.0.0' ],
+82 silly audit   'has-symbols': [ '1.1.0' ],
+82 silly audit   hasown: [ '2.0.2' ],
+82 silly audit   hookable: [ '5.5.3' ],
+82 silly audit   'human-signals': [ '8.0.1' ],
+82 silly audit   ignore: [ '5.3.2' ],
+82 silly audit   'import-fresh': [ '3.3.1' ],
+82 silly audit   imurmurhash: [ '0.1.4' ],
+82 silly audit   inflight: [ '1.0.6' ],
+82 silly audit   inherits: [ '2.0.4' ],
+82 silly audit   'is-docker': [ '3.0.0' ],
+82 silly audit   'is-extglob': [ '2.1.1' ],
+82 silly audit   'is-glob': [ '4.0.3' ],
+82 silly audit   'is-inside-container': [ '1.0.0' ],
+82 silly audit   'is-plain-obj': [ '4.1.0' ],
+82 silly audit   'is-stream': [ '4.0.1' ],
+82 silly audit   'is-unicode-supported': [ '2.1.0' ],
+82 silly audit   'is-what': [ '5.5.0' ],
+82 silly audit   'is-wsl': [ '3.1.0' ],
+82 silly audit   isexe: [ '2.0.0' ],
+82 silly audit   ismobilejs: [ '1.1.1' ],
+82 silly audit   'js-tokens': [ '4.0.0' ],
+82 silly audit   'js-yaml': [ '4.1.1' ],
+82 silly audit   jsesc: [ '3.1.0' ],
+82 silly audit   'json-buffer': [ '3.0.1' ],
+82 silly audit   'json-schema-traverse': [ '0.4.1' ],
+82 silly audit   'json-stable-stringify-without-jsonify': [ '1.0.1' ],
+82 silly audit   json5: [ '2.2.3' ],
+82 silly audit   jsonfile: [ '4.0.0', '6.2.0' ],
+82 silly audit   keyv: [ '4.5.4' ],
+82 silly audit   kolorist: [ '1.8.0' ],
+82 silly audit   levn: [ '0.4.1' ],
+82 silly audit   'locate-path': [ '6.0.0', '5.0.0' ],
+82 silly audit   lodash: [ '4.17.21' ],
+82 silly audit   'lodash.merge': [ '4.6.2' ],
+82 silly audit   'lru-cache': [ '5.1.1' ],
+82 silly audit   'magic-string': [ '0.30.21' ],
+82 silly audit   'make-dir': [ '3.1.0' ],
+82 silly audit   'math-intrinsics': [ '1.1.0' ],
+82 silly audit   minimatch: [ '3.1.2' ],
+82 silly audit   mitt: [ '3.0.1' ],
+82 silly audit   mrmime: [ '2.0.1' ],
+82 silly audit   ms: [ '2.1.3' ],
+82 silly audit   'natural-compare': [ '1.4.0' ],
+82 silly audit   'node-releases': [ '2.0.27' ],
+82 silly audit   'npm-run-path': [ '6.0.0' ],
+82 silly audit   'path-key': [ '4.0.0', '3.1.1' ],
+82 silly audit   'nth-check': [ '2.1.1' ],
+82 silly audit   'object-assign': [ '4.1.1' ],
+82 silly audit   'object-inspect': [ '1.13.4' ],
+82 silly audit   once: [ '1.4.0' ],
+82 silly audit   open: [ '10.2.0' ],
+82 silly audit   optionator: [ '0.9.4' ],
+82 silly audit   'p-limit': [ '3.1.0', '2.3.0' ],
+82 silly audit   'p-locate': [ '5.0.0', '4.1.0' ],
+82 silly audit   'p-try': [ '2.2.0' ],
+82 silly audit   'parent-module': [ '1.0.1' ],
+82 silly audit   'parse-ms': [ '4.0.0' ],
+82 silly audit   'path-exists': [ '4.0.0' ],
+82 silly audit   'path-is-absolute': [ '1.0.1' ],
+82 silly audit   pathe: [ '2.0.3' ],
+82 silly audit   'perfect-debounce': [ '1.0.0' ],
+82 silly audit   picocolors: [ '1.1.1' ],
+82 silly audit   picomatch: [ '4.0.3' ],
+82 silly audit   pify: [ '2.3.0' ],
+82 silly audit   pinia: [ '3.0.4' ],
+82 silly audit   pinkie: [ '2.0.4' ],
+82 silly audit   'pinkie-promise': [ '2.0.1' ],
+82 silly audit   'pixi.js': [ '7.4.3' ],
+82 silly audit   '@pixi/accessibility': [ '7.4.3' ],
+82 silly audit   '@pixi/app': [ '7.4.3' ],
+82 silly audit   '@pixi/assets': [ '7.4.3' ],
+82 silly audit   '@pixi/compressed-textures': [ '7.4.3' ],
+82 silly audit   '@pixi/events': [ '7.4.3' ],
+82 silly audit   '@pixi/extract': [ '7.4.3' ],
+82 silly audit   '@pixi/filter-alpha': [ '7.4.3' ],
+82 silly audit   '@pixi/filter-blur': [ '7.4.3' ],
+82 silly audit   '@pixi/filter-color-matrix': [ '7.4.3' ],
+82 silly audit   '@pixi/filter-displacement': [ '7.4.3' ],
+82 silly audit   '@pixi/filter-fxaa': [ '7.4.3' ],
+82 silly audit   '@pixi/filter-noise': [ '7.4.3' ],
+82 silly audit   '@pixi/graphics': [ '7.4.3' ],
+82 silly audit   '@pixi/mesh': [ '7.4.3' ],
+82 silly audit   '@pixi/mesh-extras': [ '7.4.3' ],
+82 silly audit   '@pixi/mixin-cache-as-bitmap': [ '7.4.3' ],
+82 silly audit   '@pixi/mixin-get-child-by-name': [ '7.4.3' ],
+82 silly audit   '@pixi/mixin-get-global-position': [ '7.4.3' ],
+82 silly audit   '@pixi/particle-container': [ '7.4.3' ],
+82 silly audit   '@pixi/prepare': [ '7.4.3' ],
+82 silly audit   '@pixi/sprite-animated': [ '7.4.3' ],
+82 silly audit   '@pixi/sprite-tiling': [ '7.4.3' ],
+82 silly audit   '@pixi/spritesheet': [ '7.4.3' ],
+82 silly audit   '@pixi/text': [ '7.4.3' ],
+82 silly audit   '@pixi/text-bitmap': [ '7.4.3' ],
+82 silly audit   '@pixi/text-html': [ '7.4.3' ],
+82 silly audit   'pkg-dir': [ '4.2.0' ],
+82 silly audit   postcss: [ '8.5.6' ],
+82 silly audit   'postcss-selector-parser': [ '6.1.2' ],
+82 silly audit   'prelude-ls': [ '1.2.1' ],
+82 silly audit   prettier: [ '3.5.3' ],
+82 silly audit   'prettier-linter-helpers': [ '1.0.0' ],
+82 silly audit   'pretty-ms': [ '9.3.0' ],
+82 silly audit   punycode: [ '2.3.1', '1.4.1' ],
+82 silly audit   qs: [ '6.14.0' ],
+82 silly audit   'resolve-from': [ '4.0.0' ],
+82 silly audit   rfdc: [ '1.4.1' ],
+82 silly audit   rollup: [ '4.53.2' ],
+82 silly audit   'run-applescript': [ '7.1.0' ],
+82 silly audit   'shebang-command': [ '2.0.0' ],
+82 silly audit   'shebang-regex': [ '3.0.0' ],
+82 silly audit   'side-channel': [ '1.1.0' ],
+82 silly audit   'side-channel-list': [ '1.0.0' ],
+82 silly audit   'side-channel-map': [ '1.0.1' ],
+82 silly audit   'side-channel-weakmap': [ '1.0.2' ],
+82 silly audit   'signal-exit': [ '4.1.0' ],
+82 silly audit   sirv: [ '3.0.2' ],
+82 silly audit   'source-map-js': [ '1.2.1' ],
+82 silly audit   speakingurl: [ '14.0.1' ],
+82 silly audit   'strip-final-newline': [ '4.0.0' ],
+82 silly audit   'strip-json-comments': [ '3.1.1' ],
+82 silly audit   'strip-outer': [ '1.0.1' ],
+82 silly audit   superjson: [ '2.2.5' ],
+82 silly audit   'supports-color': [ '7.2.0' ],
+82 silly audit   synckit: [ '0.11.11' ],
+82 silly audit   tinyglobby: [ '0.2.15' ],
+82 silly audit   totalist: [ '3.0.1' ],
+82 silly audit   'trim-repeated': [ '1.0.0' ],
+82 silly audit   'type-check': [ '0.4.0' ],
+82 silly audit   'unicorn-magic': [ '0.3.0' ],
+82 silly audit   universalify: [ '0.1.2', '2.0.1' ],
+82 silly audit   'update-browserslist-db': [ '1.1.4' ],
+82 silly audit   'uri-js': [ '4.4.1' ],
+82 silly audit   url: [ '0.11.4' ],
+82 silly audit   'util-deprecate': [ '1.0.2' ],
+82 silly audit   vite: [ '7.2.2' ],
+82 silly audit   'vite-hot-client': [ '2.1.0' ],
+82 silly audit   'vite-plugin-vue-devtools': [ '7.7.8' ],
+82 silly audit   'vite-plugin-inspect': [ '0.8.9' ],
+82 silly audit   'vite-plugin-vue-inspector': [ '5.3.2' ],
+82 silly audit   vue: [ '3.5.24' ],
+82 silly audit   'vue-eslint-parser': [ '10.2.0' ],
+82 silly audit   'vue-router': [ '4.6.3' ],
+82 silly audit   which: [ '2.0.2' ],
+82 silly audit   'word-wrap': [ '1.2.5' ],
+82 silly audit   wrappy: [ '1.0.2' ],
+82 silly audit   'wsl-utils': [ '0.1.0' ],
+82 silly audit   'xml-name-validator': [ '4.0.0' ],
+82 silly audit   yallist: [ '3.1.1' ],
+82 silly audit   'yocto-queue': [ '0.1.0' ],
+82 silly audit   yoctocolors: [ '2.1.2' ],
+82 silly audit   'chart.js': [ '4.5.1' ],
+82 silly audit   '@kurkle/color': [ '0.3.4' ]
+82 silly audit }
+83 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\fsevents
+84 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\fsevents' ]
+85 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-win32-ia32-msvc
+86 silly reify mark deleted [
+86 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-win32-ia32-msvc'
+86 silly reify ]
+87 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-win32-arm64-msvc
+88 silly reify mark deleted [
+88 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-win32-arm64-msvc'
+88 silly reify ]
+89 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-openharmony-arm64
+90 silly reify mark deleted [
+90 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-openharmony-arm64'
+90 silly reify ]
+91 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-x64-musl
+92 silly reify mark deleted [
+92 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-x64-musl'
+92 silly reify ]
+93 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-x64-gnu
+94 silly reify mark deleted [
+94 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-x64-gnu'
+94 silly reify ]
+95 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-s390x-gnu
+96 silly reify mark deleted [
+96 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-s390x-gnu'
+96 silly reify ]
+97 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-riscv64-musl
+98 silly reify mark deleted [
+98 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-riscv64-musl'
+98 silly reify ]
+99 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-riscv64-gnu
+100 silly reify mark deleted [
+100 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-riscv64-gnu'
+100 silly reify ]
+101 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-ppc64-gnu
+102 silly reify mark deleted [
+102 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-ppc64-gnu'
+102 silly reify ]
+103 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-loong64-gnu
+104 silly reify mark deleted [
+104 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-loong64-gnu'
+104 silly reify ]
+105 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-arm64-musl
+106 silly reify mark deleted [
+106 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-arm64-musl'
+106 silly reify ]
+107 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-arm64-gnu
+108 silly reify mark deleted [
+108 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-arm64-gnu'
+108 silly reify ]
+109 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-arm-musleabihf
+110 silly reify mark deleted [
+110 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-arm-musleabihf'
+110 silly reify ]
+111 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-linux-arm-gnueabihf
+112 silly reify mark deleted [
+112 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-linux-arm-gnueabihf'
+112 silly reify ]
+113 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-freebsd-x64
+114 silly reify mark deleted [
+114 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-freebsd-x64'
+114 silly reify ]
+115 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-freebsd-arm64
+116 silly reify mark deleted [
+116 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-freebsd-arm64'
+116 silly reify ]
+117 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-darwin-x64
+118 silly reify mark deleted [
+118 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-darwin-x64'
+118 silly reify ]
+119 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-darwin-arm64
+120 silly reify mark deleted [
+120 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-darwin-arm64'
+120 silly reify ]
+121 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-android-arm64
+122 silly reify mark deleted [
+122 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-android-arm64'
+122 silly reify ]
+123 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@rollup\rollup-android-arm-eabi
+124 silly reify mark deleted [
+124 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@rollup\\rollup-android-arm-eabi'
+124 silly reify ]
+125 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\win32-ia32
+126 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\win32-ia32' ]
+127 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\win32-arm64
+128 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\win32-arm64' ]
+129 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\sunos-x64
+130 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\sunos-x64' ]
+131 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\openharmony-arm64
+132 silly reify mark deleted [
+132 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\openharmony-arm64'
+132 silly reify ]
+133 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\openbsd-x64
+134 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\openbsd-x64' ]
+135 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\openbsd-arm64
+136 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\openbsd-arm64' ]
+137 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\netbsd-x64
+138 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\netbsd-x64' ]
+139 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\netbsd-arm64
+140 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\netbsd-arm64' ]
+141 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-x64
+142 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-x64' ]
+143 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-s390x
+144 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-s390x' ]
+145 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-riscv64
+146 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-riscv64' ]
+147 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-ppc64
+148 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-ppc64' ]
+149 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-mips64el
+150 silly reify mark deleted [
+150 silly reify   'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-mips64el'
+150 silly reify ]
+151 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-loong64
+152 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-loong64' ]
+153 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-ia32
+154 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-ia32' ]
+155 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-arm64
+156 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-arm64' ]
+157 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\linux-arm
+158 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\linux-arm' ]
+159 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\freebsd-x64
+160 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\freebsd-x64' ]
+161 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\freebsd-arm64
+162 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\freebsd-arm64' ]
+163 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\darwin-x64
+164 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\darwin-x64' ]
+165 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\darwin-arm64
+166 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\darwin-arm64' ]
+167 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\android-x64
+168 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\android-x64' ]
+169 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\android-arm64
+170 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\android-arm64' ]
+171 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\android-arm
+172 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\android-arm' ]
+173 verbose reify failed optional dependency E:\AI-SYNTIA-V5\frontend\node_modules\@esbuild\aix-ppc64
+174 silly reify mark deleted [ 'E:\\AI-SYNTIA-V5\\frontend\\node_modules\\@esbuild\\aix-ppc64' ]
+175 http cache @kurkle/color@https://registry.npmjs.org/@kurkle/color/-/color-0.3.4.tgz 0ms (cache hit)
+176 http cache chart.js@https://registry.npmjs.org/chart.js/-/chart.js-4.5.1.tgz 0ms (cache hit)
+177 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 273ms
+178 silly audit report {
+178 silly audit report   'gh-pages': [
+178 silly audit report     {
+178 silly audit report       id: 1097162,
+178 silly audit report       url: 'https://github.com/advisories/GHSA-8mmm-9v2q-x3f9',
+178 silly audit report       title: 'tschaub gh-pages vulnerable to prototype pollution',
+178 silly audit report       severity: 'critical',
+178 silly audit report       vulnerable_versions: '<5.0.0',
+178 silly audit report       cwe: [Array],
+178 silly audit report       cvss: [Object]
+178 silly audit report     }
+178 silly audit report   ]
+178 silly audit report }
+179 silly packumentCache corgi:https://registry.npmjs.org/gh-pages cache-miss
+180 http fetch GET 200 https://registry.npmjs.org/gh-pages 82ms (cache revalidated)
+181 silly packumentCache corgi:https://registry.npmjs.org/gh-pages set size:42989 disposed:false
+182 silly packumentCache corgi:https://registry.npmjs.org/@zennomi%2fpixi-live2d-display cache-miss
+183 http fetch GET 200 https://registry.npmjs.org/@zennomi%2fpixi-live2d-display 1402ms (cache revalidated)
+184 silly packumentCache corgi:https://registry.npmjs.org/@zennomi%2fpixi-live2d-display set size:2649 disposed:false
+185 verbose stack Error: EPERM: operation not permitted, open 'E:\AI-SYNTIA-V5\frontend\package.json'
+185 verbose stack     at async open (node:internal/fs/promises:634:25)
+185 verbose stack     at async writeFile (node:internal/fs/promises:1208:14)
+185 verbose stack     at async PackageJson.save (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\node_modules\@npmcli\package-json\lib\index.js:255:23)
+185 verbose stack     at async [saveIdealTree] (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:1512:9)
+185 verbose stack     at async Arborist.reify (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:148:5)
+185 verbose stack     at async Install.exec (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\lib\commands\install.js:149:5)
+185 verbose stack     at async Npm.exec (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\lib\npm.js:207:9)
+185 verbose stack     at async module.exports (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\lib\cli\entry.js:67:5)
+186 error code EPERM
+187 error syscall open
+188 error path E:\AI-SYNTIA-V5\frontend\package.json
+189 error errno -4048
+190 error Error: EPERM: operation not permitted, open 'E:\AI-SYNTIA-V5\frontend\package.json'
+190 error     at async open (node:internal/fs/promises:634:25)
+190 error     at async writeFile (node:internal/fs/promises:1208:14)
+190 error     at async PackageJson.save (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\node_modules\@npmcli\package-json\lib\index.js:255:23)
+190 error     at async [saveIdealTree] (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:1512:9)
+190 error     at async Arborist.reify (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\node_modules\@npmcli\arborist\lib\arborist\reify.js:148:5)
+190 error     at async Install.exec (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\lib\commands\install.js:149:5)
+190 error     at async Npm.exec (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\lib\npm.js:207:9)
+190 error     at async module.exports (C:\Users\eduar\AppData\Roaming\npm\node_modules\npm\lib\cli\entry.js:67:5) {
+190 error   errno: -4048,
+190 error   code: 'EPERM',
+190 error   syscall: 'open',
+190 error   path: 'E:\\AI-SYNTIA-V5\\frontend\\package.json'
+190 error }
+191 error
+191 error The operation was rejected by your operating system.
+191 error It's possible that the file was already in use (by a text editor or antivirus),
+191 error or that you lack permissions to access it.
+191 error
+191 error If you believe this might be a permissions issue, please double-check the
+191 error permissions of the file and its containing directories, or try running
+191 error the command again as root/Administrator.
+192 silly unfinished npm timer reify 1764421474605
+193 silly unfinished npm timer reify:save 1764421479966
+194 verbose cwd E:\AI-SYNTIA-V5\frontend
+195 verbose os Windows_NT 10.0.26200
+196 verbose node v23.9.0
+197 verbose npm  v11.1.0
+198 verbose exit -4048
+199 verbose code -4048
+200 error A complete log of this run can be found in: C:\Users\eduar\AppData\Local\npm-cache\_logs\2025-11-29T13_04_34_022Z-debug-0.log

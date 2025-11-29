@@ -59,9 +59,10 @@ const authStore = useAuthStore()
 
 const selectedMode = ref('concise')
 
-// Get current character from auth store
+// Get current character from auth store (now persisted in localStorage)
 const currentCharacterId = computed(() => {
-  return authStore.user?.preferred_character || 'aria'
+  // First try the persisted character, then user object, then default to 'aria'
+  return authStore.preferredCharacter || authStore.user?.preferred_character || 'aria'
 })
 
 const currentCharacterConfig = computed(() => {

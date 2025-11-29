@@ -34,7 +34,10 @@
             <p>Let's explore new topics and have fun learning!</p>
           </div>
 
-          <button class="btn-start-learning" @click="startLearning">Start Learning 🚀</button>
+          <div class="action-buttons">
+            <button class="btn-start-learning" @click="startLearning">Start Learning 🚀</button>
+            <button class="btn-view-metrics" @click="viewMetrics">View My Progress 📊</button>
+          </div>
         </div>
 
         <!-- Stats Grid -->
@@ -152,6 +155,10 @@ const handleLogout = () => {
 
 const startLearning = () => {
   router.push('/learn/math/grade-4')
+}
+
+const viewMetrics = () => {
+  router.push('/student/metrics')
 }
 </script>
 
@@ -295,6 +302,13 @@ const startLearning = () => {
   color: var(--color-text-muted);
 }
 
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .btn-start-learning {
   padding: 18px 40px;
   background: var(--color-neon);
@@ -311,6 +325,25 @@ const startLearning = () => {
 .btn-start-learning:hover {
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 0 40px rgba(160, 0, 255, 0.6);
+}
+
+.btn-view-metrics {
+  padding: 18px 40px;
+  background: rgba(0, 234, 255, 0.1);
+  color: var(--color-cyan);
+  border: 2px solid var(--color-cyan);
+  border-radius: 30px;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.2);
+}
+
+.btn-view-metrics:hover {
+  background: rgba(0, 234, 255, 0.2);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 0 30px rgba(0, 234, 255, 0.4);
 }
 
 .stats-grid {

@@ -1,0 +1,12 @@
+[
+{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"education_tutor"},
+{"type":"table","name":"retention_tracking","database":"education_tutor","data":
+[
+{"id":"1","student_id":"3","lesson_id":"lesson_1_1_3","initial_mastery_date":"2025-11-28 17:35:24","initial_score":"500","review_count":"0","last_reviewed_at":null,"current_retention_rate":"1.00"},
+{"id":"2","student_id":"3","lesson_id":"lesson_1_1_2","initial_mastery_date":"2025-11-29 02:22:44","initial_score":"500","review_count":"0","last_reviewed_at":null,"current_retention_rate":"1.00"},
+{"id":"3","student_id":"2","lesson_id":"lesson_1_1_1","initial_mastery_date":"2025-11-29 08:52:17","initial_score":"600","review_count":"0","last_reviewed_at":null,"current_retention_rate":"1.00"},
+{"id":"4","student_id":"2","lesson_id":"lesson_1_1_3","initial_mastery_date":"2025-11-29 08:50:07","initial_score":"700","review_count":"0","last_reviewed_at":null,"current_retention_rate":"1.00"}
+]
+}
+]

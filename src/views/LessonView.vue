@@ -149,6 +149,7 @@ import QuestionCard from '@/components/education/QuestionCard.vue'
 import ProgressBar from '@/components/education/ProgressBar.vue'
 import coachService from '@/services/coachService'
 import { apiPost } from '@/utils/apiClient'
+import { useMetricsStore } from '@/stores/metricsStore'
 import {
   getWelcomeMessage,
   getPracticeStartMessage,
@@ -163,6 +164,7 @@ const route = useRoute()
 const router = useRouter()
 const educationStore = useEducationStore()
 const authStore = useAuthStore()
+const metricsStore = useMetricsStore()
 
 const loading = ref(true)
 const error = ref(null)
@@ -196,8 +198,15 @@ const allQuestionsAnswered = computed(() => {
 
 /**
  * Start session tracking
+ * NOTE: Disabled - now handled by metricsStore
  */
 const startSession = async (lessonId) => {
+  // Session tracking is now handled by the global metricsStore
+  // This old implementation is disabled to avoid 404 errors
+  console.log('[LessonView] Session tracking handled by metricsStore')
+  return
+
+  /* OLD CODE - DISABLED
   if (!authStore.user?.id) return
 
   try {
@@ -215,12 +224,19 @@ const startSession = async (lessonId) => {
     console.error('Failed to start session:', err)
     // Don't block user flow if session tracking fails
   }
+  */
 }
 
 /**
  * End session tracking
+ * NOTE: Disabled - now handled by metricsStore
  */
 const endSession = async () => {
+  // Session tracking is now handled by the global metricsStore
+  console.log('[LessonView] Session tracking handled by metricsStore')
+  return
+
+  /* OLD CODE - DISABLED
   if (!sessionId.value || !authStore.user?.id) return
 
   try {
@@ -242,6 +258,7 @@ const endSession = async () => {
   } catch (err) {
     console.error('Failed to end session:', err)
   }
+  */
 }
 
 /**
@@ -298,6 +315,9 @@ const started = ref(false)
 const startLessonInteraction = () => {
   started.value = true
   lessonStartTime.value = Date.now() // Start timing the lesson
+
+  // Reset behavioral metrics for this lesson
+  metricsStore.resetBehaviorData()
 
   // Now show the tutor button since lesson has actually started
   educationStore.setTutorButton(true, '💡 Want me to explain this differently?')
@@ -401,6 +421,12 @@ const handlePracticeAnswer = async (answerIndex) => {
       authStore.userId ||
       (localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null)
 
+    // Track hesitation (time before answering)
+    metricsStore.trackHesitation(timeSpent * 1000) // Convert to ms
+
+    // Track interaction
+    metricsStore.trackInteraction()
+
     if (!studentId) {
       console.error(
         '[LessonView] Cannot track question: User ID missing from store and localStorage',
@@ -480,14 +506,6 @@ const submitLesson = async () => {
       ? Math.round((Date.now() - lessonStartTime.value) / 1000)
       : 0
 
-    // Calculate mastery level
-    const calculateMasteryLevel = (score) => {
-      if (score >= 90) return 'mastered'
-      if (score >= 80) return 'proficient'
-      if (score >= 70) return 'developing'
-      return 'needs_practice'
-    }
-
     // Get student ID robustly
     const studentId =
       authStore.user?.id ||
@@ -497,20 +515,18 @@ const submitLesson = async () => {
     // Save progress to backend
     if (studentId && route.query.mode !== 'review') {
       try {
+        const timeSpentMinutes = Math.ceil(timeSpent / 60)
+
         console.log('[LessonView] Saving lesson progress:', {
           lesson_id: route.params.lessonId,
           score: finalScore,
-          time_spent: timeSpent,
-          completed: true,
-          mastery_level: calculateMasteryLevel(finalScore),
+          time_spent_minutes: timeSpentMinutes,
         })
 
-        await apiPost(`/students/${studentId}/progress`, {
-          lesson_id: route.params.lessonId,
+        await apiPost(`/students/${studentId}/progress/${route.params.lessonId}`, {
           score: finalScore,
-          time_spent: timeSpent,
-          completed: true,
-          mastery_level: calculateMasteryLevel(finalScore),
+          time_spent_minutes: timeSpentMinutes,
+          num_questions: totalQuestions.value,
         })
 
         console.log('[LessonView] Lesson progress saved successfully')
@@ -520,6 +536,17 @@ const submitLesson = async () => {
       }
     } else if (!studentId) {
       console.warn('[LessonView] Cannot save progress: User ID missing')
+    }
+
+    // Send behavioral analytics data
+    if (studentId && route.query.mode !== 'review' && lessonStartTime.value) {
+      try {
+        const totalLessonTime = Date.now() - lessonStartTime.value
+        await metricsStore.sendBehaviorData(route.params.lessonId, totalLessonTime)
+        console.log('[LessonView] Behavioral data sent successfully')
+      } catch (err) {
+        console.error('Failed to send behavioral data:', err)
+      }
     }
 
     // End session
@@ -546,12 +573,25 @@ onMounted(() => {
 
   // End session if user closes/refreshes page
   window.addEventListener('beforeunload', endSession)
+
+  // Track tab visibility for focus score during lessons
+  document.addEventListener('visibilitychange', handleLessonVisibilityChange)
 })
+
+// Handle visibility changes during lesson for focus tracking
+function handleLessonVisibilityChange() {
+  if (document.visibilityState === 'hidden') {
+    metricsStore.trackTabSwitch()
+  } else {
+    metricsStore.resumeFocus()
+  }
+}
 
 // Cleanup on component unmount
 onBeforeUnmount(async () => {
   await endSession()
   window.removeEventListener('beforeunload', endSession)
+  document.removeEventListener('visibilitychange', handleLessonVisibilityChange)
 })
 </script>
 

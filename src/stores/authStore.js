@@ -5,12 +5,14 @@
 
 import { defineStore } from 'pinia'
 import { authService } from '@/services/authService'
+import { useMetricsStore } from './metricsStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('authToken') || null,
     userType: localStorage.getItem('userType') || null, // 'parent' or 'student'
     userId: localStorage.getItem('userId') ? parseInt(localStorage.getItem('userId')) : null,
+    preferredCharacter: localStorage.getItem('preferredCharacter') || null, // Store character preference
     user: null, // Full user object from /auth/me
     isAuthenticated: !!localStorage.getItem('authToken'),
     loading: false,
@@ -69,6 +71,11 @@ export const useAuthStore = defineStore('auth', {
         const data = await authService.loginParent(email, password)
         this._setAuthData(data)
         await this.loadUserInfo()
+
+        // Start metrics tracking
+        const metricsStore = useMetricsStore()
+        await metricsStore.startTracking()
+
         return data
       } catch (error) {
         this.error = error.message
@@ -89,6 +96,11 @@ export const useAuthStore = defineStore('auth', {
         const data = await authService.loginStudent(username, password)
         this._setAuthData(data)
         await this.loadUserInfo()
+
+        // Start metrics tracking
+        const metricsStore = useMetricsStore()
+        await metricsStore.startTracking()
+
         return data
       } catch (error) {
         this.error = error.message
@@ -109,6 +121,11 @@ export const useAuthStore = defineStore('auth', {
           this.user = await authService.getParentInfo()
         } else if (this.isStudent) {
           this.user = await authService.getStudentInfo()
+          // Store preferred character in localStorage for persistence
+          if (this.user?.preferred_character) {
+            this.preferredCharacter = this.user.preferred_character
+            localStorage.setItem('preferredCharacter', this.user.preferred_character)
+          }
         }
       } catch (error) {
         console.error('Failed to load user info:', error)
@@ -121,13 +138,21 @@ export const useAuthStore = defineStore('auth', {
      * Logout current user
      */
     logout() {
+      // Stop metrics tracking
+      const metricsStore = useMetricsStore()
+      metricsStore.stopTracking('logout')
+
       authService.logout()
       this.token = null
       this.userType = null
       this.userId = null
+      this.preferredCharacter = null
       this.user = null
       this.isAuthenticated = false
       this.error = null
+
+      // Clear preferred character from localStorage
+      localStorage.removeItem('preferredCharacter')
     },
 
     /**

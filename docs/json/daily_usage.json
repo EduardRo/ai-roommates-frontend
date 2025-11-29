@@ -1,0 +1,9 @@
+[
+{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"education_tutor"},
+{"type":"table","name":"daily_usage","database":"education_tutor","data":
+[
+{"id":"1","student_id":"2","usage_date":"2025-11-29","total_minutes":"14","session_count":"1","lessons_completed":"0","questions_answered":"0","last_updated":"2025-11-29 08:52:20"}
+]
+}
+]

@@ -12,14 +12,35 @@
       </div>
 
       <!-- Quick stats (Student) -->
-      <div v-if="userType === 'student'" class="quick-stats">
-        <div class="stat">
-          <span class="stat-label">This Week:</span>
-          <span class="stat-value">{{ weeklyStats.lessons }} lessons</span>
+      <div v-if="userType === 'student'" class="stats-container">
+        <!-- Weekly Stats -->
+        <div class="stats-section">
+          <h4 class="stats-title">📅 This Week</h4>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Lessons</span>
+              <span class="stat-value">{{ weeklyStats.lessons }}</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Average</span>
+              <span class="stat-value">{{ weeklyStats.average }}%</span>
+            </div>
+          </div>
         </div>
-        <div class="stat">
-          <span class="stat-label">Average:</span>
-          <span class="stat-value">{{ weeklyStats.average }}%</span>
+
+        <!-- Monthly Stats -->
+        <div class="stats-section">
+          <h4 class="stats-title">📊 This Month</h4>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Lessons</span>
+              <span class="stat-value">{{ monthlyStats.lessons }}</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Average</span>
+              <span class="stat-value">{{ monthlyStats.average }}%</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -60,6 +81,7 @@ const coachStore = useCoachStore()
 
 const recommendations = ref([])
 const weeklyStats = ref({ lessons: 0, average: 0 })
+const monthlyStats = ref({ lessons: 0, average: 0 })
 const childrenSummary = ref([])
 
 const topRecommendation = computed(() => {
@@ -104,11 +126,18 @@ onMounted(async () => {
       userId: userId,
     })
     console.log('[CoachWidget] Received insights:', insights)
+    console.log('[CoachWidget] Insights type:', typeof insights)
+    console.log('[CoachWidget] Insights keys:', Object.keys(insights || {}))
 
     if (props.userType === 'student') {
+      console.log('[CoachWidget] Raw weekly_stats from backend:', insights.weekly_stats)
+      console.log('[CoachWidget] Raw monthly_stats from backend:', insights.monthly_stats)
       recommendations.value = insights.recommendations || []
       weeklyStats.value = insights.weekly_stats || { lessons: 0, average: 0 }
+      monthlyStats.value = insights.monthly_stats || { lessons: 0, average: 0 }
       console.log('[CoachWidget] Set weekly stats:', weeklyStats.value)
+      console.log('[CoachWidget] Set monthly stats:', monthlyStats.value)
+      console.log('[CoachWidget] Set recommendations:', recommendations.value)
     } else {
       childrenSummary.value = insights // Parent endpoint returns array directly
     }
@@ -165,12 +194,71 @@ onMounted(async () => {
   line-height: 1.5;
 }
 
-.quick-stats,
+.stats-container {
+  margin: 1rem 0;
+}
+
+.stats-section {
+  margin-bottom: 1.5rem;
+}
+
+.stats-section:last-child {
+  margin-bottom: 0;
+}
+
+.stats-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-muted, #999);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.stat-card {
+  background: rgba(0, 234, 255, 0.05);
+  border: 1px solid rgba(0, 234, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  background: rgba(0, 234, 255, 0.1);
+  border-color: var(--color-cyan, #00eaff);
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  color: var(--color-text-muted, #999);
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  color: var(--color-cyan, #00eaff);
+  font-weight: 800;
+  font-size: 1.75rem;
+  text-shadow: 0 0 10px var(--color-cyan, #00eaff);
+}
+
 .children-summary {
   margin: 1rem 0;
 }
 
-.stat,
 .child-stat {
   display: flex;
   justify-content: space-between;
@@ -178,23 +266,14 @@ onMounted(async () => {
   border-bottom: 1px solid var(--color-border, #2a2a35);
 }
 
-.stat:last-child,
 .child-stat:last-child {
   border-bottom: none;
 }
 
-.stat-label,
 .child-name {
   color: var(--color-text-muted, #999);
   font-size: 0.9rem;
   font-weight: 500;
-}
-
-.stat-value {
-  color: var(--color-cyan, #00eaff);
-  font-weight: 700;
-  font-size: 1rem;
-  text-shadow: 0 0 5px var(--color-cyan, #00eaff);
 }
 
 .status-badge {

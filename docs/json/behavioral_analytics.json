@@ -1,0 +1,11 @@
+[
+{"type":"header","version":"5.2.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"education_tutor"},
+{"type":"table","name":"behavioral_analytics","database":"education_tutor","data":
+[
+{"id":"1","student_id":"2","session_id":"1","lesson_id":"lesson_1_1_1","recorded_at":"2025-11-29 08:40:13","pace_level":null,"focus_score":"1.00","engagement_level":"high","completed_session":"1","stopped_early":"0","time_wasted_seconds":"0","repeated_mistakes":"0","avg_response_time_seconds":null,"hesitation_count":"0","help_requests":"0","ai_observations":"{\"tab_switches\": 0}"},
+{"id":"2","student_id":"2","session_id":"1","lesson_id":"lesson_1_1_3","recorded_at":"2025-11-29 08:50:07","pace_level":null,"focus_score":"1.00","engagement_level":"high","completed_session":"1","stopped_early":"0","time_wasted_seconds":"0","repeated_mistakes":"0","avg_response_time_seconds":null,"hesitation_count":"9","help_requests":"0","ai_observations":"{\"tab_switches\": 0}"},
+{"id":"3","student_id":"2","session_id":"1","lesson_id":"lesson_1_1_1","recorded_at":"2025-11-29 08:52:17","pace_level":null,"focus_score":"1.00","engagement_level":"high","completed_session":"1","stopped_early":"0","time_wasted_seconds":"0","repeated_mistakes":"0","avg_response_time_seconds":null,"hesitation_count":"1","help_requests":"0","ai_observations":"{\"tab_switches\": 0}"}
+]
+}
+]
